@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update  # ddl : data definition language, ???? ??? ?? ? ?? ??
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true  # SQL을 보기 좋게 포맷
+        use_sql_comments: true  # SQL 주석 활성화
+  datasource:
+    url: jdbc:mysql://211.188.59.240:3306/winter_hackathon
+    username: hyeokkiyaa
+    password: hyeokkiyaa
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    show-sql: true
+    defer-datasource-initialization: true
+
+cloud:
+  aws:
+    region:
+      static:
+    credentials:
+      accessKey:
+      secretKey:
+    s3:
+      bucket:
+
+google:
+  oauth:
+    client-id:
+    client-secret:
