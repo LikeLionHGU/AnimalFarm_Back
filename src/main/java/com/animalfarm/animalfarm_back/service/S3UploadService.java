@@ -26,6 +26,7 @@ public class S3UploadService {
     public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+        //여기서 throw 던짐
         return upload(uploadFile, dirName);
     }
 
@@ -33,6 +34,7 @@ public class S3UploadService {
         String fileName = dirName + UUID.randomUUID() + "_" + uploadFile.getName();
         amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile));
         removeNewFile(uploadFile);
+
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
@@ -45,7 +47,9 @@ public class S3UploadService {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
+        // 여기 이슈 잡을 필요.
         File convertFile = File.createTempFile("temp", file.getOriginalFilename());
+
         try (FileOutputStream fos = new FileOutputStream(convertFile)) {
             fos.write(file.getBytes());
         }
