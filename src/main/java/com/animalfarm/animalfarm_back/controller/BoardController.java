@@ -22,7 +22,7 @@ public class BoardController {
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @RequestParam(value = "board", required = true) BoardAddRequest boardAddRequest,
+            @ModelAttribute BoardAddRequest boardAddRequest,
             @RequestParam(value = "images", required = false) MultipartFile multipartFile) {
         try {
             String uploadUrl = s3UploadService.uploadFiles(multipartFile, "va/");

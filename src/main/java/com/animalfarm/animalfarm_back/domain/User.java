@@ -17,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@MappedSuperclass
 public class User {
 
     @Id
@@ -30,7 +29,7 @@ public class User {
 
 
     @OneToMany(
-            mappedBy = "board",
+            mappedBy = "user",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
