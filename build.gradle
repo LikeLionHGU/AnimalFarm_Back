@@ -34,6 +34,8 @@ dependencies {
     implementation 'software.amazon.awssdk:s3:'
     implementation 'software.amazon.awssdk:sso'
     implementation 'software.amazon.awssdk:ssooidc'
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.780'
 }
 
 tasks.named('test') {
