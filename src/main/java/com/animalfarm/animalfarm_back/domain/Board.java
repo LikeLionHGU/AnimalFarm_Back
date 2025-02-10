@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@MappedSuperclass
 public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -32,7 +32,7 @@ public class Board {
     private double latitude;
     private String detailLocation;
     private int boardType;
-    private String phoneNumber;
+    private String phoneNum;
     private int category;
     private int isFound;
     private int isRead;
@@ -60,7 +60,7 @@ public class Board {
                 .latitude(boardAddRequest.getLatitude())
                 .detailLocation(boardAddRequest.getDetailLocation())
                 .boardType(boardAddRequest.getBoardType())
-                .phoneNumber(boardAddRequest.getPhoneNum())
+                .phoneNum(boardAddRequest.getPhoneNum())
                 .category(boardAddRequest.getCategory())
                 .isFound(0)
                 .isRead(0)

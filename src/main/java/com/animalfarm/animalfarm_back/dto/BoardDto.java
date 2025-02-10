@@ -44,7 +44,7 @@ public class BoardDto {
                 .latitude(board.getLatitude())
                 .detailLocation(board.getDetailLocation())
                 .boardType(board.getBoardType())
-                .phoneNumber(board.getPhoneNumber())
+                .phoneNumber(board.getPhoneNum())
                 .category(board.getCategory())
                 .isFound(board.getIsFound())
                 .isRead(board.getIsRead())
