@@ -12,6 +12,7 @@ public class BoardAddRequest {
     private String detailLocation;
     private String phoneNum;
     private String content;
+    private int boardType;
 
     public BoardAddRequest(String content, String phoneNum, String detailLocation, double latitude, double longitude, String location, int category, String title) {
         this.content = content;

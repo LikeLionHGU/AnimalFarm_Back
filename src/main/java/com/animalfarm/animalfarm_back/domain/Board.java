@@ -1,5 +1,6 @@
 package com.animalfarm.animalfarm_back.domain;
 
+import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,11 +31,11 @@ public class Board {
     private double longitude;
     private double latitude;
     private String detailLocation;
-    private boolean boardType;
+    private int boardType;
     private String phoneNumber;
     private int category;
-    private boolean isFound;
-    private boolean isRead;
+    private int isFound;
+    private int isRead;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -48,4 +49,21 @@ public class Board {
     @LastModifiedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updateDate;
+
+    public static Board from(BoardAddRequest boardAddRequest, String imageURL) {
+        return Board.builder()
+                .title(boardAddRequest.getTitle())
+                .image(imageURL)
+                .content(boardAddRequest.getContent())
+                .location(boardAddRequest.getLocation())
+                .longitude(boardAddRequest.getLongitude())
+                .latitude(boardAddRequest.getLatitude())
+                .detailLocation(boardAddRequest.getDetailLocation())
+                .boardType(boardAddRequest.getBoardType())
+                .phoneNumber(boardAddRequest.getPhoneNum())
+                .category(boardAddRequest.getCategory())
+                .isFound(0)
+                .isRead(0)
+                .build();
+    }
 }
