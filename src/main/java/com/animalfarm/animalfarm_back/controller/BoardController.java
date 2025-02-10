@@ -4,6 +4,7 @@ import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.S3UploadService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,11 @@ public class BoardController {
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @ModelAttribute BoardAddRequest boardAddRequest,
-            @RequestParam(value = "images", required = false) MultipartFile multipartFile) {
+            @RequestPart (value = "boardAddRequest", required = false) BoardAddRequest boardAddRequest,
+            @RequestPart (value = "file", required = false) MultipartFile multipartFile) {
         try {
             String uploadUrl = s3UploadService.uploadFiles(multipartFile, "va/");
+
             BoardAddResponse response = boardService.saveBoard(boardAddRequest, uploadUrl);
 
             return ResponseEntity.ok(response);
