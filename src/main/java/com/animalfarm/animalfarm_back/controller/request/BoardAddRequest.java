@@ -25,21 +25,5 @@ public class BoardAddRequest {
         this.title = title;
     }
 
-    public BoardAddRequest(int category, String title, String location, String phoneNum, String content) {
-        this.category = category;
-        this.title = title;
-        this.location = location;
-        this.phoneNum = phoneNum;
-        this.content = content;
-    }
 
-    public BoardAddRequest(int category, String title, double longitude, double latitude, String detailLocation, String phoneNum, String content) {
-        this.category = category;
-        this.title = title;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.detailLocation = detailLocation;
-        this.phoneNum = phoneNum;
-        this.content = content;
-    }
 }
