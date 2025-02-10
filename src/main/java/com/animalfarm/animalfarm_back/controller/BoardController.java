@@ -16,23 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardController {
     private final BoardService boardService;
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+    private final S3UploadService s3UploadService;
+
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
             @RequestParam(value = "board", required = true) BoardAddRequest boardAddRequest,
-            @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+            @RequestParam(value = "images", required = false) MultipartFile multipartFile) {
         try {
-
-            @Value("${cloud.aws.s3.bucket}")
-            private String bucket;
-
-            private final S3UploadService s3UploadService;
-
-            String uploadUrl = null;
-            if (multipartFile != null && !multipartFile.isEmpty()) {
-                S3UploadService S3UploadService;
-                uploadUrl = S3UploadService.uploadFiles(multipartFile, "likelion/");
-            }
-
+            String uploadUrl = s3UploadService.uploadFiles(multipartFile, "va/");
             BoardAddResponse response = boardService.saveBoard(boardAddRequest, uploadUrl);
 
             return ResponseEntity.ok(response);
