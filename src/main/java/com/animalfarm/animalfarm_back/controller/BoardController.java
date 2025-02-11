@@ -30,8 +30,8 @@ public class BoardController {
             @ModelAttribute ("board") BoardAddRequest boardAddRequest,
             @RequestParam (value = "image", required = false) MultipartFile image) throws IOException {
         try {
+            System.out.println("start");
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image);
-            System.out.println("1");
             BoardAddResponse boardAddResponse = new BoardAddResponse();
             boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
             if (boardDto == null) {
