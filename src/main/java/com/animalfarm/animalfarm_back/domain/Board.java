@@ -38,9 +38,9 @@ public class Board {
     private int isFound;
     private int isRead;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -68,7 +68,7 @@ public class Board {
                 .build();
     }
 
-    public static Board from(BoardDto boardDto, String imageURL, User user) {
+    public static Board from(BoardDto boardDto, String imageURL) {
         return Board.builder()
                 .title(boardDto.getTitle())
                 .image(imageURL)
@@ -84,7 +84,6 @@ public class Board {
                 .isRead(boardDto.getIsRead())
                 .regDate(boardDto.getRegDate())
                 .updateDate(boardDto.getUpdateDate())
-                .user(user)
                 .build();
     }
 }

@@ -64,12 +64,16 @@ public class BoardService {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
+        System.out.println("2");
         File convertFile = File.createTempFile("temp", file.getOriginalFilename());
-
-        try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-            fos.write(file.getBytes());
+        System.out.println("3");
+        if (convertFile.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                fos.write(file.getBytes());
+            }
+            return Optional.of(convertFile);
         }
-        return Optional.of(convertFile);
+        return Optional.empty();
     }
 
     public BoardDto saveBoard(BoardDto boardDto, MultipartFile multipartFile) throws IOException {
@@ -78,12 +82,7 @@ public class BoardService {
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
             boardImageUrl = uploadFileToS3(uploadFile);
         }
-        User user = new User();
-        user.setId("0");
-        user.setName("익명");
-        user.setImage("NULL");
-        user.setEmail("익명");
-        Board board = Board.from(boardDto, boardImageUrl, user);
+        Board board = Board.from(boardDto, boardImageUrl);
         boardRepository.save(board);
         return BoardDto.from(board, generateImageUrl(board.getImage()));
     }
