@@ -30,7 +30,7 @@ public class BoardController {
             @ModelAttribute("board") BoardAddRequest boardAddRequest,
             @RequestParam("image") MultipartFile image) throws IOException {
         try {
-            BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image);
+            BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/");
             System.out.println("boardDto = " + boardDto.getTitle());
             System.out.println("get image finished...");
             BoardAddResponse boardAddResponse = new BoardAddResponse();
