@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-
 @Service
 @RequiredArgsConstructor
 public class S3UploadService {
@@ -48,7 +47,9 @@ public class S3UploadService {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
         // 여기 이슈 잡을 필요.
-        File convertFile = File.createTempFile("temp", file.getOriginalFilename());
+        String originalFileName = file.getOriginalFilename();
+        System.out.println("Flag");
+        File convertFile = File.createTempFile("temp", originalFileName);
 
         try (FileOutputStream fos = new FileOutputStream(convertFile)) {
             fos.write(file.getBytes());
