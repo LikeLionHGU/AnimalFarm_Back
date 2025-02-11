@@ -27,18 +27,15 @@ public class BoardController {
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @ModelAttribute ("board") BoardAddRequest boardAddRequest,
-            @RequestParam (value = "image", required = false) MultipartFile image) throws IOException {
+            @ModelAttribute("board") BoardAddRequest boardAddRequest,
+            @RequestParam("image") MultipartFile image) throws IOException {
         try {
-            System.out.println("start");
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image);
+            System.out.println("boardDto = " + boardDto.getTitle());
+            System.out.println("get image finished...");
             BoardAddResponse boardAddResponse = new BoardAddResponse();
             boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
-            if (boardDto == null) {
-                boardAddResponse.setIsSuccess(0);
-            } else{
-                boardAddResponse.setIsSuccess(1);
-            }
+            boardAddResponse.setIsSuccess(1);
             return ResponseEntity.ok().body(boardAddResponse);
         } catch (Exception e) {
             BoardAddResponse errorResponse = BoardAddResponse.builder()

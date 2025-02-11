@@ -1,14 +1,12 @@
 package com.animalfarm.animalfarm_back.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
-import com.amazonaws.services.s3.AmazonS3;
+
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+
 import com.animalfarm.animalfarm_back.domain.Board;
-import com.animalfarm.animalfarm_back.domain.User;
+
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,27 +62,26 @@ public class BoardService {
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        System.out.println("2");
-        System.out.println(file.getOriginalFilename());
         File convertFile = File.createTempFile("temp", file.getOriginalFilename());
-        System.out.println("3");
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
+        try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+            fos.write(file.getBytes());
         }
-        return Optional.empty();
+        return Optional.of(convertFile);
     }
 
-    public BoardDto saveBoard(BoardDto boardDto, MultipartFile multipartFile) throws IOException {
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            File uploadFile = convert(multipartFile)
+    public BoardDto saveBoard(BoardDto boardDto, MultipartFile image) throws IOException {
+        System.out.println("Start saving");
+        if (image != null && !image.isEmpty()) {
+            System.out.println("got file");
+            File uploadFile = convert(image)
                     .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
             boardImageUrl = uploadFileToS3(uploadFile);
+            System.out.println("got url");
         }
+        System.out.println("dto to board: if this pop up without got file and got url it is error");
         Board board = Board.from(boardDto, boardImageUrl);
         boardRepository.save(board);
+        System.out.println("saved board");
         return BoardDto.from(board, generateImageUrl(board.getImage()));
     }
 
