@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Board {
 

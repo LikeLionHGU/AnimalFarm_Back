@@ -98,6 +98,8 @@ public class BoardDto {
                 .image(url)
                 .isFound(board.getIsFound())
                 .isRead(board.getIsRead())
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
                 .build();
     }
 }
