@@ -1,6 +1,7 @@
 package com.animalfarm.animalfarm_back.domain;
 
 import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
+import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -64,6 +65,26 @@ public class Board {
                 .category(boardAddRequest.getCategory())
                 .isFound(0)
                 .isRead(0)
+                .build();
+    }
+
+    public static Board from(BoardDto boardDto, String imageURL, User user) {
+        return Board.builder()
+                .title(boardDto.getTitle())
+                .image(imageURL)
+                .content(boardDto.getContent())
+                .location(boardDto.getLocation())
+                .latitude(boardDto.getLatitude())
+                .longitude(boardDto.getLongitude())
+                .detailLocation(boardDto.getDetailLocation())
+                .boardType(boardDto.getBoardType())
+                .phoneNum(boardDto.getPhoneNumber())
+                .category(boardDto.getCategory())
+                .isFound(boardDto.getIsFound())
+                .isRead(boardDto.getIsRead())
+                .regDate(boardDto.getRegDate())
+                .updateDate(boardDto.getUpdateDate())
+                .user(user)
                 .build();
     }
 }

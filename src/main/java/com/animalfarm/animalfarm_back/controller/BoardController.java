@@ -2,6 +2,7 @@ package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
+import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.S3UploadService;
 import jakarta.validation.Valid;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/board")
@@ -19,18 +22,24 @@ public class BoardController {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
     private final S3UploadService s3UploadService;
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @RequestPart (value = "boardAddRequest", required = false) BoardAddRequest boardAddRequest,
-            @RequestPart (value = "file", required = false) MultipartFile multipartFile) {
+            @ModelAttribute ("board") BoardAddRequest boardAddRequest,
+            @RequestParam (value = "image", required = false) MultipartFile image) throws IOException {
         try {
-            String uploadUrl = s3UploadService.uploadFiles(multipartFile, "va/");
-
-            BoardAddResponse response = boardService.saveBoard(boardAddRequest, uploadUrl);
-
-            return ResponseEntity.ok(response);
+            BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image);
+            System.out.println("1");
+            BoardAddResponse boardAddResponse = new BoardAddResponse();
+            boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
+            if (boardDto == null) {
+                boardAddResponse.setIsSuccess(0);
+            } else{
+                boardAddResponse.setIsSuccess(1);
+            }
+            return ResponseEntity.ok().body(boardAddResponse);
         } catch (Exception e) {
             BoardAddResponse errorResponse = BoardAddResponse.builder()
                     .isLogin(1) // 로그인 확인 함수 필요
