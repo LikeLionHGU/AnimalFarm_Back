@@ -36,48 +36,46 @@ public class BoardService {
     private String boardImageUrl = null;
 
 
-    private String uploadFileToS3(File uploadFile){
-        UUID uuid = UUID.randomUUID();
-        String fileName = uploadFile.getName() + "_" + uuid;
-
-        putS3(uploadFile, fileName);
-        removeNewFile(uploadFile);
-
-        return fileName;
+    public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+        return upload(uploadFile, dirName);
     }
 
-    private void removeNewFile(File targetFile){
-        if(targetFile.delete()){
-            System.out.println("파일이 삭제되었습니다.");
-        }else{
-            System.out.println("파일이 삭제되지 못했습니다.");
-        }
-    }
-
-    private String putS3(File uploadFile, String fileName){
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
-                .withCannedAcl(CannedAccessControlList.PublicRead)
-        );
+    // S3에 파일 업로드
+    private String upload(File uploadFile, String dirName) {
+        String fileName = dirName + UUID.randomUUID() + "_" + uploadFile.getName(); // 파일명 생성
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile)); // S3 업로드 :: ACL 설정 해준 사람을 위해서 추가해 둠.
+        removeNewFile(uploadFile); // 임시 파일 삭제
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
+    // 로컬 임시 파일 삭제
+    // 임시 파일 만드는 이유 : MultipartFile(Spring의 파일 형식)은 바로 PutObjectRequest에 사용 불가!
+    // 따라서 MultipartFile을 File로 변환하는 과정이 있는 것! (file을 쓰는 것이 전통적인 방식!)
+    private void removeNewFile(File targetFile) {
+        if (targetFile.delete()) {
+            System.out.println("임시 파일 삭제 성공: " + targetFile.getName());
+        } else {
+            System.out.println("임시 파일 삭제 실패: " + targetFile.getName());
+        }
+    }
+
+    // MultipartFile -> File 변환
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = File.createTempFile("temp", file.getOriginalFilename());
+        File convertFile = File.createTempFile("temp", file.getOriginalFilename()); // 임시 파일 생성
         try (FileOutputStream fos = new FileOutputStream(convertFile)) {
             fos.write(file.getBytes());
         }
         return Optional.of(convertFile);
     }
 
-    public BoardDto saveBoard(BoardDto boardDto, MultipartFile image) throws IOException {
-        System.out.println("Start saving");
-        if (image != null && !image.isEmpty()) {
-            System.out.println("got file");
-            File uploadFile = convert(image)
-                    .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-            boardImageUrl = uploadFileToS3(uploadFile);
-            System.out.println("got url");
-        }
+    public BoardDto saveBoard(BoardDto boardDto, MultipartFile image, String dirName) throws IOException {
+        File uploadFile = convert(image)
+                .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+        boardImageUrl = upload(uploadFile, dirName);
+
+
         System.out.println("dto to board: if this pop up without got file and got url it is error");
         Board board = Board.from(boardDto, boardImageUrl);
         boardRepository.save(board);
