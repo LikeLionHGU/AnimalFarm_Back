@@ -65,6 +65,7 @@ public class BoardService {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
         System.out.println("2");
+        System.out.println(file.getOriginalFilename());
         File convertFile = File.createTempFile("temp", file.getOriginalFilename());
         System.out.println("3");
         if (convertFile.createNewFile()) {
