@@ -54,19 +54,50 @@ public class BoardDto {
                 .build();
     }
 
-    public static BoardDto fromBoardAddRequest(BoardAddRequest boardAddRequest, Long boardId) {
+    public static BoardDto fromBoardAddRequest(Board board) {
         return BoardDto.builder()
-                .id(boardId)
+                .title(board.getTitle())
+                .category(board.getCategory())
+                .location(board.getLocation())
+                .longitude(board.getLongitude())
+                .latitude(board.getLatitude())
+                .detailLocation(board.getDetailLocation())
+                .phoneNumber(board.getPhoneNum())
+                .content(board.getContent())
+                .boardType(board.getBoardType())
+                .build();
+    }
+
+    public static BoardDto from(BoardAddRequest boardAddRequest) {
+        return BoardDto.builder()
                 .title(boardAddRequest.getTitle())
-                .category(boardAddRequest.getCategory())
+                .content(boardAddRequest.getContent())
                 .location(boardAddRequest.getLocation())
                 .longitude(boardAddRequest.getLongitude())
                 .latitude(boardAddRequest.getLatitude())
                 .detailLocation(boardAddRequest.getDetailLocation())
-                .phoneNumber(boardAddRequest.getPhoneNum())
-                .content(boardAddRequest.getContent())
                 .boardType(boardAddRequest.getBoardType())
+                .phoneNumber(boardAddRequest.getPhoneNum())
+                .category(boardAddRequest.getCategory())
+                .isFound(0)
+                .isRead(0)
                 .build();
     }
 
+    public static BoardDto from(Board board, String url) {
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .location(board.getLocation())
+                .longitude(board.getLongitude())
+                .detailLocation(board.getDetailLocation())
+                .boardType(board.getBoardType())
+                .phoneNumber(board.getPhoneNum())
+                .category(board.getCategory())
+                .image(url)
+                .isFound(board.getIsFound())
+                .isRead(board.getIsRead())
+                .build();
+    }
 }

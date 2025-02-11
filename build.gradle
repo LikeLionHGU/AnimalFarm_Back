@@ -38,6 +38,7 @@ dependencies {
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.780'
     implementation 'software.amazon.awssdk:s3:2.20.40'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
