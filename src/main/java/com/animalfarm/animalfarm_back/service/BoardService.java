@@ -75,11 +75,8 @@ public class BoardService {
                 .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
         boardImageUrl = upload(uploadFile, dirName);
 
-
-        System.out.println("dto to board: if this pop up without got file and got url it is error");
         Board board = Board.from(boardDto, boardImageUrl);
         boardRepository.save(board);
-        System.out.println("saved board");
         return BoardDto.from(board, generateImageUrl(board.getImage()));
     }
 

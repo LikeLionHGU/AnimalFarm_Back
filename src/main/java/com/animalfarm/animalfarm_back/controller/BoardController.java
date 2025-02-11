@@ -4,8 +4,6 @@ import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
-import com.animalfarm.animalfarm_back.service.S3UploadService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +21,14 @@ public class BoardController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final S3UploadService s3UploadService;
-
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @ModelAttribute("board") BoardAddRequest boardAddRequest,
+            @RequestPart("board") BoardAddRequest boardAddRequest,
             @RequestParam("image") MultipartFile image) throws IOException {
         try {
+            System.out.println(boardAddRequest);
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/");
             System.out.println("boardDto = " + boardDto.getTitle());
-            System.out.println("get image finished...");
             BoardAddResponse boardAddResponse = new BoardAddResponse();
             boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
             boardAddResponse.setIsSuccess(1);
