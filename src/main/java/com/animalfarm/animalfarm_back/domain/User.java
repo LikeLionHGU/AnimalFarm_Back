@@ -27,12 +27,12 @@ public class User {
     private String image;
     private String email;
 
-    @OneToMany(
-            mappedBy = "user",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Board> boards = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "user",
+//            fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true)
+//    private List<Board> boards = new ArrayList<>();
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")

@@ -39,7 +39,6 @@ public class BoardService {
         File uploadFile = s3UploadService.convert(image)
                 .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
         String boardImageUrl = s3UploadService.upload(uploadFile, dirName);
-
         Board board = Board.from(boardDto, boardImageUrl);
         boardRepository.save(board);
         return BoardDto.from(board, generateImageUrl(board.getImage()));
