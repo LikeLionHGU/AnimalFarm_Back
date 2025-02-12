@@ -1,5 +1,6 @@
 package com.animalfarm.animalfarm_back.controller;
 
+import com.animalfarm.animalfarm_back.controller.request.LoginTokenRequest;
 import com.animalfarm.animalfarm_back.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -31,21 +32,27 @@ public class LoginSessionController {
     }
 
     @GetMapping("/login/clientid")
-    public ResponseEntity<String> get() {
-        return ResponseEntity.ok(clientId);
+    public ResponseEntity<Map<String, String>> getClientId() {
+        Map<String, String> response = new HashMap<>();
+        response.put("clientId", clientId);
+        return ResponseEntity.ok(response);
+
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> googleLogin(@RequestParam("googleIdToken") String credential, HttpSession session) {
+    public ResponseEntity<Map<String, Object>> googleLogin(
+            @RequestBody LoginTokenRequest request,
+            HttpSession session) {
         // ID Token 검증 및 사용자 정보 추출
-        System.out.println(clientId);
+        Map<String, Object> response = new HashMap<>();
+        String credential = request.getGoogleIdToken();
+        System.out.println(credential);
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = new GsonFactory();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
                 .setAudience(Collections.singletonList(clientId))
                 .build();
         try {
-
             GoogleIdToken idToken = verifier.verify(credential);
             if (idToken != null) {
                 Payload payload = idToken.getPayload();
@@ -64,16 +71,13 @@ public class LoginSessionController {
                 session.setAttribute("name", name);
                 session.setAttribute("pictureUrl", pictureUrl);
 
-                Map<String, Object> response = new HashMap<>();
                 response.put("isLogin", 1);
                 return ResponseEntity.ok(response);
             } else {
-                Map<String, Object> response = new HashMap<>();
                 response.put("isLogin", 0);
                 return ResponseEntity.badRequest().body(response);
             }
         } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
             response.put("isLogin", 0);
             return ResponseEntity.badRequest().body(response);
         }

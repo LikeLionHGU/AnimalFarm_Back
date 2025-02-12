@@ -4,6 +4,7 @@ import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,15 @@ public class BoardController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @PostMapping("/add")
+    @PostMapping("/found/add")
     public ResponseEntity<BoardAddResponse> addBoard(
             @RequestPart("board") BoardAddRequest boardAddRequest,
-            @RequestParam("image") MultipartFile image) throws IOException {
+            @RequestParam("image") MultipartFile image,
+            HttpSession session ) throws IOException {
         try {
-            System.out.println(boardAddRequest);
+            String userId = (String) session.getAttribute("userId");
+
+
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/");
             System.out.println("boardDto = " + boardDto.getTitle());
             BoardAddResponse boardAddResponse = new BoardAddResponse();
