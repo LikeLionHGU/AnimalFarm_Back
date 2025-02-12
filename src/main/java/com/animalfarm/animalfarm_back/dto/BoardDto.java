@@ -48,7 +48,7 @@ public class BoardDto {
                 .category(board.getCategory())
                 .isFound(board.getIsFound())
                 .isRead(board.getIsRead())
-                .userId(board.getUser().getId())
+//                .userId(board.getUser().getId())
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
                 .build();
