@@ -29,7 +29,7 @@ public class BoardDto {
     private int isFound;
     private int isRead;
 
-//    private String userId;
+    private String userId;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
@@ -48,7 +48,7 @@ public class BoardDto {
                 .category(board.getCategory())
                 .isFound(board.getIsFound())
                 .isRead(board.getIsRead())
-//                .userId(board.getUser().getId())
+                .userId(board.getUser().getId())
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
                 .build();
