@@ -29,28 +29,28 @@ public class S3UploadService {
         return upload(uploadFile, dirName);
     }
 
-    private String upload(File uploadFile, String dirName) {
-        String fileName = dirName + UUID.randomUUID() + "_" + uploadFile.getName();
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile));
-        removeNewFile(uploadFile);
-
+    // S3에 파일 업로드
+    public String upload(File uploadFile, String dirName) {
+        String fileName = dirName + UUID.randomUUID() + "_" + uploadFile.getName(); // 파일명 생성
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile)); // S3 업로드 :: ACL 설정 해준 사람을 위해서 추가해 둠.
+        removeNewFile(uploadFile); // 임시 파일 삭제
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-    private void removeNewFile(File targetFile) {
+    // 로컬 임시 파일 삭제
+    // 임시 파일 만드는 이유 : MultipartFile(Spring의 파일 형식)은 바로 PutObjectRequest에 사용 불가!
+    // 따라서 MultipartFile을 File로 변환하는 과정이 있는 것! (file을 쓰는 것이 전통적인 방식!)
+    public void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-            System.out.println("임시 파일 삭제 성공");
+            System.out.println("임시 파일 삭제 성공: " + targetFile.getName());
         } else {
-            System.out.println("임시 저장 파일 삭제 실패");
+            System.out.println("임시 파일 삭제 실패: " + targetFile.getName());
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws IOException {
-        // 여기 이슈 잡을 필요.
-        String originalFileName = file.getOriginalFilename();
-        System.out.println("Flag");
-        File convertFile = File.createTempFile("temp", originalFileName);
-
+    // MultipartFile -> File 변환
+    public Optional<File> convert(MultipartFile file) throws IOException {
+        File convertFile = File.createTempFile("temp", file.getOriginalFilename()); // 임시 파일 생성
         try (FileOutputStream fos = new FileOutputStream(convertFile)) {
             fos.write(file.getBytes());
         }
