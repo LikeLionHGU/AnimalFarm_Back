@@ -68,7 +68,7 @@ public class Board {
                 .build();
     }
 
-    public static Board from(BoardDto boardDto, String imageURL) {
+    public static Board from(BoardDto boardDto, String imageURL, User user) {
         return Board.builder()
                 .title(boardDto.getTitle())
                 .image(imageURL)
@@ -80,6 +80,7 @@ public class Board {
                 .boardType(boardDto.getBoardType())
                 .phoneNum(boardDto.getPhoneNumber())
                 .category(boardDto.getCategory())
+                .user(user)
                 .isFound(boardDto.getIsFound())
                 .isRead(boardDto.getIsRead())
                 .regDate(boardDto.getRegDate())
