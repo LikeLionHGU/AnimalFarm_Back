@@ -4,6 +4,7 @@ import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
+import com.animalfarm.animalfarm_back.dto.UserDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -36,14 +37,12 @@ public class BoardController {
             if (session == null) {
                 user = userService.findUserById("1");
                 if (user == null) {
-                    File newImage = null;
-                    //새로운 이미지 파일 처리 익명 유저 프로필
-                    String newImageUrl = null;
+
                     user = new User();
                     user.setId("1");
                     user.setName("익명");
                     user.setEmail("익명");
-                    user.setImage(newImageUrl);
+                    user.setImage("https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
                 }
             } else {
                 user = userService.findUserById((String) session.getAttribute("userId"));
