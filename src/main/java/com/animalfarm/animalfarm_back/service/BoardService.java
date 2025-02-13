@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import com.animalfarm.animalfarm_back.domain.Board;
 
+import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +36,11 @@ public class BoardService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    public BoardDto saveBoard(BoardDto boardDto, MultipartFile image, String dirName) throws IOException {
+    public BoardDto saveBoard(BoardDto boardDto, MultipartFile image, String dirName, User newUser) throws IOException {
         File uploadFile = s3UploadService.convert(image)
                 .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
         String boardImageUrl = s3UploadService.upload(uploadFile, dirName);
-        Board board = Board.from(boardDto, boardImageUrl);
+        Board board = Board.from(boardDto, boardImageUrl, newUser);
         boardRepository.save(board);
         return BoardDto.from(board, generateImageUrl(board.getImage()));
     }
