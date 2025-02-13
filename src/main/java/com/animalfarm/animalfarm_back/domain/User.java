@@ -32,6 +32,7 @@ public class User {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @Builder.Default
     private List<Board> boards = new ArrayList<>();
 
     @CreatedDate
