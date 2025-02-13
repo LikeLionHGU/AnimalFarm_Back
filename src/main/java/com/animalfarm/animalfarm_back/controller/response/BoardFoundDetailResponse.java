@@ -1,6 +1,5 @@
 package com.animalfarm.animalfarm_back.controller.response;
 
-import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.UserDto;
 import lombok.AllArgsConstructor;
@@ -9,13 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BoardDetailResponse {
+public class BoardFoundDetailResponse {
 
     private Long boardId;
     private String title;
@@ -33,8 +31,8 @@ public class BoardDetailResponse {
 
     private String userName;
 
-    public static BoardDetailResponse fromBoard(BoardDto boardDto, UserDto userDto) {
-        return BoardDetailResponse.builder()
+    public static BoardFoundDetailResponse fromBoard(BoardDto boardDto, UserDto userDto) {
+        return BoardFoundDetailResponse.builder()
                 .boardId(boardDto.getId())
                 .title(boardDto.getTitle())
                 .category(boardDto.getCategory())
