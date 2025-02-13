@@ -49,9 +49,6 @@ public class BoardController {
                 user = userService.findUserById((String) session.getAttribute("userId"));
             }
 
-
-
-
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/", user);
 
             BoardAddResponse boardAddResponse = new BoardAddResponse();
@@ -66,4 +63,7 @@ public class BoardController {
             return ResponseEntity.ok(errorResponse);
         }
     }
+
+
+
 }
