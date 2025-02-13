@@ -1,6 +1,7 @@
 package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.LoginTokenRequest;
+import com.animalfarm.animalfarm_back.controller.response.LoginStatusResponse;
 import com.animalfarm.animalfarm_back.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,45 +42,44 @@ public class LoginSessionController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> googleLogin(
+    public ResponseEntity<LoginStatusResponse> googleLogin(
             @RequestBody LoginTokenRequest request,
             HttpSession session) {
-        // ID Token 검증 및 사용자 정보 추출
-        Map<String, Object> response = new HashMap<>();
         String credential = request.getGoogleIdToken();
-        System.out.println(credential);
+        LoginStatusResponse response = new LoginStatusResponse();
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = new GsonFactory();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
                 .setAudience(Collections.singletonList(clientId))
                 .build();
         try {
+            System.out.println(credential+"\n");
             GoogleIdToken idToken = verifier.verify(credential);
-            if (idToken != null) {
-                Payload payload = idToken.getPayload();
+            System.out.println("Client ID from server config: " + clientId);
 
-                String userId = payload.getSubject();
-                String email = payload.getEmail();
-                String name = (String) payload.get("name");
-                String pictureUrl = (String) payload.get("picture");
+            System.out.println("\nClient ID from token: " + idToken.getPayload().getAudience());
+
+            Payload payload = idToken.getPayload();
+
+            String userId = payload.getSubject();
+            String email = payload.getEmail();
+            String name = (String) payload.get("name");
+            String pictureUrl = (String) payload.get("picture");
 
 
-                userService.saveOrUpdateUser(userId, email, name, pictureUrl);
+            userService.saveOrUpdateUser(userId, email, name, pictureUrl);
 
-                // 세션 객체에 사용자 정보 저장
-                session.setAttribute("userId", userId);
-                session.setAttribute("email", email);
-                session.setAttribute("name", name);
-                session.setAttribute("pictureUrl", pictureUrl);
+            // 세션 객체에 사용자 정보 저장
+            session.setAttribute("userId", userId);
+            session.setAttribute("email", email);
+            session.setAttribute("name", name);
+            session.setAttribute("pictureUrl", pictureUrl);
 
-                response.put("isLogin", 1);
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("isLogin", 0);
-                return ResponseEntity.badRequest().body(response);
-            }
+            response.setIsLogin(1);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("isLogin", 0);
+            System.out.println(e.getMessage());
+            response.setIsLogin(0);
             return ResponseEntity.badRequest().body(response);
         }
     }
