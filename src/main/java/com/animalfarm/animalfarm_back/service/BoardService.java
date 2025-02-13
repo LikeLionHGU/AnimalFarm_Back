@@ -2,13 +2,11 @@ package com.animalfarm.animalfarm_back.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import com.animalfarm.animalfarm_back.domain.Board;
 
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
+import com.animalfarm.animalfarm_back.dto.UserDto;
 import com.animalfarm.animalfarm_back.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
