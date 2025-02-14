@@ -26,27 +26,28 @@ public class BoardController {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    User user;
+    User user = null;
 
     @PostMapping("/found/add")
     public ResponseEntity<BoardAddResponse> addBoard(
             @RequestPart("board") BoardAddRequest boardAddRequest,
             @RequestParam("image") MultipartFile image,
-            HttpSession session ) throws IOException {
+            HttpSession session) throws IOException {
         try {
-            if (session == null) {
+
+            String userId = (String) session.getAttribute("userId");
+
+            if (session.getAttribute("userId") == null) {
                 user = userService.findUserById("1");
                 if (user == null) {
-
-                    user = new User();
-                    user.setId("1");
-                    user.setName("익명");
-                    user.setEmail("익명");
-                    user.setImage("https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
+                    userService.saveOrUpdateUser("1","익명","익명","https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
+                    user = userService.findUserById("1");
                 }
             } else {
-                user = userService.findUserById((String) session.getAttribute("userId"));
+                user = userService.findUserById(session.getAttribute("userId").toString());
             }
+
+
 
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/", user);
 

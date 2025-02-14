@@ -53,11 +53,7 @@ public class LoginSessionController {
                 .setAudience(Collections.singletonList(clientId))
                 .build();
         try {
-            System.out.println(credential+"\n");
             GoogleIdToken idToken = verifier.verify(credential);
-            System.out.println("Client ID from server config: " + clientId);
-
-            System.out.println("\nClient ID from token: " + idToken.getPayload().getAudience());
 
             Payload payload = idToken.getPayload();
 
@@ -74,7 +70,11 @@ public class LoginSessionController {
             session.setAttribute("email", email);
             session.setAttribute("name", name);
             session.setAttribute("pictureUrl", pictureUrl);
+            session.setMaxInactiveInterval(-1); //session 무한 설정
 
+            System.out.println(session.getAttribute("userId"));
+
+            //session 저장 되는 것은 확인
             response.setIsLogin(1);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
