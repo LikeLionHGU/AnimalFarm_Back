@@ -12,6 +12,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("https://lostnfoundservice.netlify.app/")
                 .allowedMethods("*")
+                .allowCredentials(true)
                 .allowCredentials(true);
     }
 }
