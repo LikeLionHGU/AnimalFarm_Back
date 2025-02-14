@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,12 +50,9 @@ public class BoardService {
     }
 
 
-
-
     public List<BoardDto> getMainFoundBoards() {
         List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(0);
-        List<BoardDto> boardDtos= timeTypeBoards(boards);
-        return boardDtos;
+        return timeTypeBoards(boards);
     }
 
     public List<BoardDto> getAllCategoryFoundBoardNew(BoardCategoryRequest boardCategoryRequest) {
@@ -76,37 +74,39 @@ public class BoardService {
     }
 
     public List<BoardDto> timeTypeBoards(List<Board> boards) {
-        List<BoardDto> boardDtoList = null;
+        List<BoardDto> boardDtoList = new ArrayList<>();
 
-        int timeType;
-        String printDate;
 
-        for(Board board : boards) {
+        for (Board board : boards) {
             LocalDateTime regDate = board.getRegDate();
             LocalDateTime now = LocalDateTime.now();
-            Duration diff = Duration.between(regDate.toLocalTime(), now.toLocalTime());
+            Duration diff = Duration.between(regDate, now);
 
-            if (now.toLocalDate() == regDate.toLocalDate()) {
-                if (diff.toMinutes() < 60) {
-                    if (diff.toMinutes() < 1) {
-                        timeType = 1;
-                        printDate = "방금 전";
-                    } else {
-                        timeType = 2;
-                        printDate = "분 전";
-                    }
+            int timeType;
+            String printDate;
+
+            if (now.toLocalDate().isEqual(regDate.toLocalDate())) {
+                long minutesDiff = diff.toMinutes();
+                if (minutesDiff < 1) {
+                    timeType = 1;
+                    printDate = "방금 전";
+                } else if (minutesDiff < 60) {
+                    timeType = 2;
+                    printDate = minutesDiff + "분 전";
                 } else {
                     timeType = 3;
-                    printDate = "시간 전";
+                    printDate = minutesDiff + "분 전";
                 }
             } else {
                 timeType = 4;
-                printDate = board.getRegDate().toLocalDate().toString();
+                printDate = regDate.toLocalDate().toString();
             }
 
-            BoardDto boardDto = BoardDto.from(board, timeType, printDate);
+
+            BoardDto boardDto = BoardDto.fromTimeTypeAdded(board, timeType, printDate);
             boardDtoList.add(boardDto);
         }
         return boardDtoList;
     }
 }
+

@@ -16,13 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class BoardCardResponse {
-
     private int isLogin;
-
     private List<BoardDto> board;
-
-    public ResponseEntity<BoardCardResponse> from(BoardCardResponse boardCardResponse) {
-        return ResponseEntity.ok(boardCardResponse);
-
-    }
 }

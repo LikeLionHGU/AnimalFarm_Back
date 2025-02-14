@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> findTop4ByBoardTypeOrderByRegDateDesc(int BoardType);
+    List<Board> findTop4ByBoardTypeOrderByRegDateDesc(int boardType);
 
-    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateDesc(int BoardType, int category);
+    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateDesc(int boardType, int category);
 
-    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateAsc(int BoardType, int category);
+    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateAsc(int boardType, int category);
 
-    List<Board> findAllByBoardTypeAndCategoryAndTitleOrderByRegDateDesc(int BoardType, int category, String search);
+    List<Board> findAllByBoardTypeAndCategoryAndTitleOrderByRegDateDesc(int boardType, int category, String search);
 
 }
 
