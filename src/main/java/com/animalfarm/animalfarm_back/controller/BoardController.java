@@ -1,7 +1,10 @@
 package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.request.BoardCategoryRequest;
+import com.animalfarm.animalfarm_back.controller.request.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
+import com.animalfarm.animalfarm_back.controller.response.BoardCardResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.UserDto;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,13 +44,12 @@ public class BoardController {
             if (session.getAttribute("userId") == null) {
                 user = userService.findUserById("1");
                 if (user == null) {
-                    userService.saveOrUpdateUser("1","익명","익명","https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
+                    userService.saveOrUpdateUser("1", "익명", "익명", "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
                     user = userService.findUserById("1");
                 }
             } else {
                 user = userService.findUserById(session.getAttribute("userId").toString());
             }
-
 
 
             BoardDto boardDto = boardService.saveBoard(BoardDto.from(boardAddRequest), image, "va/", user);
@@ -64,6 +67,100 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/found/main")
+    public ResponseEntity<BoardCardResponse> showMainBoard(HttpSession session) {
+        try {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
 
+            List<BoardDto> boardDtoList = boardService.getMainFoundBoards();
+            boardCardResponse.setBoard(boardDtoList);
 
+            return boardCardResponse.from(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
+        }
+
+    }
+
+    @GetMapping("/found/all/category/new")
+    public ResponseEntity<BoardCardResponse> showAllCategoryBoardNew(@RequestBody BoardCategoryRequest boardCategoryRequest, HttpSession session) {
+        try {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardNew(boardCategoryRequest);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return boardCardResponse.from(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/found/all/category/old")
+    public ResponseEntity<BoardCardResponse> showCategoryBoardOld(@RequestBody BoardCategoryRequest boardCategoryRequest, HttpSession session) {
+        try {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardOld(boardCategoryRequest);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return boardCardResponse.from(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/found/all/category/search")
+    public ResponseEntity<BoardCardResponse> showSearchBoard(@RequestBody BoardSearchRequest boardSearchRequest, HttpSession session) {
+        try {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardSearch(boardSearchRequest);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return boardCardResponse.from(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
+        }
+    }
 }
+
+
+
+
