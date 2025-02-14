@@ -33,6 +33,9 @@ public class BoardDto {
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
+    private int timeType;
+    private String printDate;
+
     public static BoardDto fromBoard(Board board) {
         return BoardDto.builder()
                 .id(board.getId())
@@ -100,6 +103,18 @@ public class BoardDto {
                 .isRead(board.getIsRead())
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
+                .build();
+    }
+
+
+    public static BoardDto from(Board board, int timeType, String printDate) {
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .category(board.getCategory())
+                .image(board.getImage())
+                .timeType(timeType)
+                .printDate(printDate)
                 .build();
     }
 }

@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,21 +17,12 @@ import java.util.Date;
 @Builder
 public class BoardCardResponse {
 
-    private Long boardId;
-    private String title;
-    private int category;
-    private String image;
-    private int timeType;
-    private LocalDateTime updateDate;
+    private int isLogin;
 
-    public static BoardCardResponse from(BoardDto boardDto) {
-        return BoardCardResponse.builder()
-                .boardId(boardDto.getId())
-                .title(boardDto.getTitle())
-                .category(boardDto.getCategory())
-                .image(boardDto.getImage())
-                //.timeType()
-                .updateDate(boardDto.getUpdateDate())
-                .build();
+    private List<BoardDto> board;
+
+    public ResponseEntity<BoardCardResponse> from(BoardCardResponse boardCardResponse) {
+        return ResponseEntity.ok(boardCardResponse);
+
     }
 }
