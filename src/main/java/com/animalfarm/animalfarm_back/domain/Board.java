@@ -51,23 +51,6 @@ public class Board {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updateDate;
 
-    public static Board from(BoardAddRequest boardAddRequest, String imageURL) {
-        return Board.builder()
-                .title(boardAddRequest.getTitle())
-                .image(imageURL)
-                .content(boardAddRequest.getContent())
-                .location(boardAddRequest.getLocation())
-                .longitude(boardAddRequest.getLongitude())
-                .latitude(boardAddRequest.getLatitude())
-                .detailLocation(boardAddRequest.getDetailLocation())
-                .boardType(boardAddRequest.getBoardType())
-                .phoneNum(boardAddRequest.getPhoneNum())
-                .category(boardAddRequest.getCategory())
-                .isFound(0)
-                .isRead(0)
-                .build();
-    }
-
     public static Board from(BoardDto boardDto, String imageURL, User user) {
         return Board.builder()
                 .title(boardDto.getTitle())
