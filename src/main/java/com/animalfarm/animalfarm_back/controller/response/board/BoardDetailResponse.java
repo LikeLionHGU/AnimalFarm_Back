@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BoardFoundDetailResponse {
+public class BoardDetailResponse {
 
     private int isLogin;
     private int isUser;

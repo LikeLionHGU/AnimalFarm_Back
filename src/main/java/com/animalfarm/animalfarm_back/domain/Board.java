@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -41,13 +43,21 @@ public class Board {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(
+            mappedBy = "board",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
     @CreatedDate
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(updatable = false)
     private LocalDateTime regDate;
 
     @LastModifiedDate
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updateDate;
 
     public static Board from(BoardDto boardDto, String imageURL, User user) {

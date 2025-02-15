@@ -7,7 +7,7 @@ import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateReques
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
-import com.animalfarm.animalfarm_back.controller.response.board.BoardFoundDetailResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -215,9 +215,9 @@ public class BoardFoundController {
     }
 
     @GetMapping("/{board_id}")
-    public ResponseEntity<BoardFoundDetailResponse> showDetailFoundBoard(@PathVariable Long board_id, HttpSession session) {
+    public ResponseEntity<BoardDetailResponse> showDetailFoundBoard(@PathVariable Long board_id, HttpSession session) {
         try {
-            BoardFoundDetailResponse boardFoundDetailResponse = new BoardFoundDetailResponse();
+            BoardDetailResponse boardFoundDetailResponse = new BoardDetailResponse();
             if (session.getAttribute("userId") == null) {
                 boardFoundDetailResponse.setIsLogin(0);
             } else {
@@ -236,7 +236,7 @@ public class BoardFoundController {
             boardFoundDetailResponse.setBoard(boardDto);
             return ResponseEntity.ok().body(boardFoundDetailResponse);
         } catch (Exception e) {
-            BoardFoundDetailResponse boardFoundDetailResponse = new BoardFoundDetailResponse();
+            BoardDetailResponse boardFoundDetailResponse = new BoardDetailResponse();
             boardFoundDetailResponse.setIsLogin(0);
             boardFoundDetailResponse.setIsUser(0);
             boardFoundDetailResponse.setBoard(null);
