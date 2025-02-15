@@ -5,6 +5,7 @@ import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequ
 import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -203,6 +204,20 @@ public class BoardLostController {
             return ResponseEntity.ok(boardCardResponse);
         }
     }
+
+    @GetMapping("/{board_id}")
+    public ResponseEntity<BoardDetailResponse> getBoardDetail(
+        @PathVariable Long board_id,
+        HttpSession session) {
+        BoardDetailResponse boardDetailResponse = new BoardDetailResponse();
+        try {
+            boardDetailResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+        }
+    }
+
+
+
 
 
 
