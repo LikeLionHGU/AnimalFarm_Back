@@ -24,12 +24,14 @@ public class BoardDto {
     private double latitude;
     private String detailLocation;
     private int boardType;
-    private String phoneNumber;
+    private String phoneNum;
     private int category;
     private int isFound;
     private int isRead;
 
     private String userId;
+    private String userName;
+
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
 
@@ -47,7 +49,7 @@ public class BoardDto {
                 .latitude(board.getLatitude())
                 .detailLocation(board.getDetailLocation())
                 .boardType(board.getBoardType())
-                .phoneNumber(board.getPhoneNum())
+                .phoneNum(board.getPhoneNum())
                 .category(board.getCategory())
                 .isFound(board.getIsFound())
                 .isRead(board.getIsRead())
@@ -65,7 +67,7 @@ public class BoardDto {
                 .longitude(board.getLongitude())
                 .latitude(board.getLatitude())
                 .detailLocation(board.getDetailLocation())
-                .phoneNumber(board.getPhoneNum())
+                .phoneNum(board.getPhoneNum())
                 .content(board.getContent())
                 .boardType(board.getBoardType())
                 .build();
@@ -80,7 +82,7 @@ public class BoardDto {
                 .latitude(boardAddRequest.getLatitude())
                 .detailLocation(boardAddRequest.getDetailLocation())
                 .boardType(boardType)
-                .phoneNumber(boardAddRequest.getPhoneNum())
+                .phoneNum(boardAddRequest.getPhoneNum())
                 .category(boardAddRequest.getCategory())
                 .isFound(0)
                 .isRead(0)
@@ -96,7 +98,7 @@ public class BoardDto {
                 .longitude(board.getLongitude())
                 .detailLocation(board.getDetailLocation())
                 .boardType(board.getBoardType())
-                .phoneNumber(board.getPhoneNum())
+                .phoneNum(board.getPhoneNum())
                 .category(board.getCategory())
                 .image(url)
                 .isFound(board.getIsFound())
@@ -115,6 +117,26 @@ public class BoardDto {
                 .image(board.getImage())
                 .timeType(timeType)
                 .printDate(printDate)
+                .build();
+    }
+
+    public static BoardDto fromDetailTimeTypeAdded(Board board, int timeType, String printDate) {
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .category(board.getCategory())
+                .content(board.getContent())
+                .image(board.getImage())
+                .location(board.getLocation())
+                .longitude(board.getLongitude())
+                .latitude(board.getLatitude())
+                .detailLocation(board.getDetailLocation())
+                .phoneNum(board.getPhoneNum())
+                .timeType(timeType)
+                .printDate(printDate)
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
+                .userName(board.getUser().getName())
                 .build();
     }
 }

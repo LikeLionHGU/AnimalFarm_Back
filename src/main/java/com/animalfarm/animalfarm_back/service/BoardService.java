@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import static com.animalfarm.animalfarm_back.service.TimeService.timeLimitBoards;
-import static com.animalfarm.animalfarm_back.service.TimeService.timeTypeBoards;
+import static com.animalfarm.animalfarm_back.service.TimeService.*;
 
 @Service
 @RequiredArgsConstructor
@@ -89,6 +89,18 @@ public class BoardService {
         List<Board> boards = boardRepository.findAllByBoardTypeAndUserOrderByRegDateDesc(0, user);
         List<BoardDto> boardDtoList = timeTypeBoards(boards);
         return boardDtoList;
+    }
+
+    public BoardDto getDetailFoundBoard(Long board_id) {
+        Board boardEntity = null;
+        Optional<Board> board = boardRepository.findById(board_id);
+        if (board.isPresent()) {
+            boardEntity = new Board();
+            boardEntity = board.get();
+        } else {
+            return null;
+        }
+        return timeTypeBoard(boardEntity);
     }
 }
 

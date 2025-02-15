@@ -62,4 +62,34 @@ public class TimeService {
         }
         return newBoards;
     }
+
+    public static BoardDto timeTypeBoard(Board board) {
+        LocalDateTime regDate = board.getRegDate();
+        LocalDateTime now = LocalDateTime.now();
+        Duration diff = Duration.between(regDate, now);
+
+        int timeType;
+        String printDate;
+
+        if (now.toLocalDate().isEqual(regDate.toLocalDate())) {
+            long minutesDiff = diff.toMinutes();
+            if (minutesDiff < 1) {
+                timeType = 1;
+                printDate = "방금 전";
+            } else if (minutesDiff < 60) {
+                timeType = 2;
+                printDate = minutesDiff + "분 전";
+            } else {
+                timeType = 3;
+                printDate = minutesDiff + "분 전";
+            }
+        } else {
+            timeType = 4;
+            printDate = regDate.toLocalDate().toString();
+        }
+
+
+        BoardDto boardDto = BoardDto.fromTimeTypeAdded(board, timeType, printDate);
+        return boardDto;
+    }
 }
