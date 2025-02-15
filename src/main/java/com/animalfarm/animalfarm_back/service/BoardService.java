@@ -80,7 +80,7 @@ public class BoardService {
     }
 
     public List<BoardDto> getMyPageMainBoard(User user) {
-        List<Board> boards = boardRepository.findTop4ByBoardTypeAndUserOrderByRegDateDesc(0, user);
+        List<Board> boards = boardRepository.findTop2ByBoardTypeAndUserOrderByRegDateDesc(0, user);
         List<BoardDto> boardDtoList = timeTypeBoards(boards);
         return boardDtoList;
     }
