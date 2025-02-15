@@ -1,7 +1,5 @@
 package com.animalfarm.animalfarm_back.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-
 import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
@@ -110,13 +108,28 @@ public class BoardService {
     }
 
     public List<BoardDto> getMyPageMainBoard(User user, int boardType) {
-        List<Board> boards = boardRepository.findTop2ByBoardTypeAndUserOrderByRegDateDesc(boardType, user);
-        return timeTypeBoards(boards);
+
+        List<Board> boards = new ArrayList<>();
+        if (boardType == 1) {
+            boards = boardRepository.findTop4ByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+        } else {
+            boards = boardRepository.findTop2ByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+        }
+
+        if (boards.isEmpty())
+            return null;
+
+        List<Board> boardList = timeLimitBoards(boards);
+
+        return timeTypeBoards(boardList);
     }
 
     public List<BoardDto> getAllMyPageBoard(User user, int boardType) {
-        List<Board> boards = boardRepository.findAllByBoardTypeAndUserOrderByRegDateDesc(boardType, user);
-        return timeTypeBoards(boards);
+        List<Board> boards;
+
+        boards = boardRepository.findByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
     public BoardDto getDetailFoundBoard(Long board_id) {

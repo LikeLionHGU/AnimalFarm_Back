@@ -160,6 +160,50 @@ public class BoardLostController {
         }
     }
 
+    @GetMapping("/mypage/main")
+    public ResponseEntity<BoardCardResponse> getMypageLostMain(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
+
+            List<BoardDto> boardDtoList = boardService.getMyPageMainBoard(user, 1);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/mypage/all")
+    public ResponseEntity<BoardCardResponse> getMypageLostMainAllNewOrder(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
+
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user, 1);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
+
 
 
 
