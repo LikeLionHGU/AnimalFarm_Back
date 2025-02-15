@@ -3,8 +3,10 @@ package com.animalfarm.animalfarm_back.controller;
 import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.BoardCategoryRequest;
 import com.animalfarm.animalfarm_back.controller.request.BoardSearchRequest;
+import com.animalfarm.animalfarm_back.controller.request.BoardUpdateRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.BoardCardResponse;
+import com.animalfarm.animalfarm_back.controller.response.BoardCompleteResponse;
 import com.animalfarm.animalfarm_back.controller.response.BoardFoundDetailResponse;
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
@@ -243,6 +245,34 @@ public class BoardFoundController {
             return ResponseEntity.ok().body(boardFoundDetailResponse);
         }
     }
+
+    @DeleteMapping("/{board_id}")
+    public ResponseEntity<BoardCompleteResponse> deleteBoard(@PathVariable Long board_id, HttpSession session) {
+        try {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            if (session.getAttribute("userId") == null) {
+                boardCompleteResponse.setIsLogin(0);
+            } else {
+                boardCompleteResponse.setIsLogin(1);
+            }
+
+            int status = boardService.deleteById(board_id);
+
+            if (status == 1) {
+                boardCompleteResponse.setIsSuccess(1);
+            } else {
+                boardCompleteResponse.setIsSuccess(0);
+            }
+
+            return ResponseEntity.ok().body(boardCompleteResponse);
+        } catch (Exception e) {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            boardCompleteResponse.setIsLogin(0);
+            boardCompleteResponse.setIsSuccess(0);
+            return ResponseEntity.ok().body(boardCompleteResponse);
+        }
+    }
+
 }
 
 
