@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -52,7 +53,16 @@ public class BoardService {
 
     public List<BoardDto> getMainFoundBoards() {
         List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(0);
-        return timeTypeBoards(boards);
+        List<Board> newBoards = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        for (Board board : boards) {
+            Duration diff = Duration.between(board.getRegDate(), now);
+            long daysDiff = diff.toDays();
+            if (daysDiff <= 14) {
+                newBoards.add(board);
+            }
+        }
+        return timeTypeBoards(newBoards);
     }
 
     public List<BoardDto> getAllCategoryFoundBoardNew(BoardCategoryRequest boardCategoryRequest) {
