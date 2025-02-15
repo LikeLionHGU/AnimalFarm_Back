@@ -286,11 +286,44 @@ public class BoardFoundController {
                 boardCompleteResponse.setIsLogin(1);
             }
 
-            BoardDto boardDto = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image);
+            BoardDto boardDto = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image, "va/", board_id);
 
+        } catch (Exception e) {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            boardCompleteResponse.setIsLogin(0);
+            boardCompleteResponse.setIsSuccess(0);
+            return ResponseEntity.ok().body(boardCompleteResponse);
         }
 
     }
+
+//    public ResponseEntity<BoardAddResponse> addBoard(
+//            @RequestPart("board") BoardAddRequest boardAddRequest,
+//            @RequestParam("image") MultipartFile image,
+//            HttpSession session) throws IOException {
+//        try {
+//            BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardAddRequest, 0), image, "va/", user);
+//
+//            BoardAddResponse boardAddResponse = new BoardAddResponse();
+//            if (session.getAttribute("userId") == null) {
+//                boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
+//            } else {
+//                boardAddResponse.setIsLogin(1);
+//            }
+//            if (boardDto == null) {
+//                boardAddResponse.setIsSuccess(0);
+//            } else {
+//                boardAddResponse.setIsSuccess(1);
+//            }
+//
+//            return ResponseEntity.ok().body(boardAddResponse);
+//        } catch (Exception e) {
+//            BoardAddResponse errorResponse = BoardAddResponse.builder()
+//                    .isLogin(1) // 로그인 확인 함수 필요
+//                    .isSuccess(0)
+//                    .build();
+//            return ResponseEntity.ok(errorResponse);
+//        }
 
 }
 
