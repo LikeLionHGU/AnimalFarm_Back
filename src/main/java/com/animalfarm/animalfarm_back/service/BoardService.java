@@ -123,15 +123,26 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image, String dirName, Long board_id) throws IOException {
-        Board board = boardRepository.findById(board_id);
+    public int updateNewBoard(BoardDto boardDto, MultipartFile image, String dirName, Long board_id, String imageUrl) throws IOException {
+        Board board = null;
+        Optional<Board> boardOptional = boardRepository.findById(board_id);
 
-        File uploadFile = s3UploadService.convert(image)
-                .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
-        String boardImageUrl = s3UploadService.upload(uploadFile, dirName);
+        if (boardOptional.isPresent()) {
+            board = boardOptional.get();
+        } else {
+            return 0;
+        }
+
+        String boardImageUrl = imageUrl; // 있으면 원래 값 없으면 null
+
+        if (image != null) {
+            File uploadFile = s3UploadService.convert(image)
+                    .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+            boardImageUrl = s3UploadService.upload(uploadFile, dirName);
+        }
 
         board.update(boardDto, boardImageUrl);
-
+        return 1;
     }
 
 }

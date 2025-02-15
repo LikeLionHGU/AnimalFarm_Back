@@ -286,8 +286,9 @@ public class BoardFoundController {
                 boardCompleteResponse.setIsLogin(1);
             }
 
-            BoardDto boardDto = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image, "va/", board_id);
-
+            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image, "va/", board_id, imageUrl);
+            boardCompleteResponse.setIsSuccess(success);
+            return ResponseEntity.ok().body(boardCompleteResponse);
         } catch (Exception e) {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
             boardCompleteResponse.setIsLogin(0);
