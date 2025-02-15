@@ -71,7 +71,7 @@ public class BoardDto {
                 .build();
     }
 
-    public static BoardDto fromFoundBoardAdd(BoardAddRequest boardAddRequest) {
+    public static BoardDto fromBoardAdd(BoardAddRequest boardAddRequest, int boardType) {
         return BoardDto.builder()
                 .title(boardAddRequest.getTitle())
                 .content(boardAddRequest.getContent())
@@ -79,7 +79,7 @@ public class BoardDto {
                 .longitude(boardAddRequest.getLongitude())
                 .latitude(boardAddRequest.getLatitude())
                 .detailLocation(boardAddRequest.getDetailLocation())
-                .boardType(0)
+                .boardType(boardType)
                 .phoneNumber(boardAddRequest.getPhoneNum())
                 .category(boardAddRequest.getCategory())
                 .isFound(0)

@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.animalfarm.animalfarm_back.service.TimeService.timeLimitBoards;
+import static com.animalfarm.animalfarm_back.service.TimeService.timeTypeBoards;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -30,6 +33,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final AmazonS3 amazonS3;
     private final S3UploadService s3UploadService;
+    private final TimeService timeService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -53,70 +57,31 @@ public class BoardService {
 
     public List<BoardDto> getMainFoundBoards() {
         List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(0);
-        List<Board> newBoards = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-        for (Board board : boards) {
-            Duration diff = Duration.between(board.getRegDate(), now);
-            long daysDiff = diff.toDays();
-            if (daysDiff <= 14) {
-                newBoards.add(board);
-            }
-        }
-        return timeTypeBoards(newBoards);
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
     public List<BoardDto> getAllCategoryFoundBoardNew(BoardCategoryRequest boardCategoryRequest) {
         List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(0, boardCategoryRequest.getCategory());
-        List<BoardDto> boardDtos = timeTypeBoards(boards);
-        return boardDtos;
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
     public List<BoardDto> getAllCategoryFoundBoardOld(BoardCategoryRequest boardCategoryRequest) {
         List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(0, boardCategoryRequest.getCategory());
-        List<BoardDto> boardDtos = timeTypeBoards(boards);
-        return boardDtos;
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
     public List<BoardDto> getAllCategoryFoundBoardSearch(BoardSearchRequest boardSearchRequest) {
         List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleOrderByRegDateDesc(0, boardSearchRequest.getCategory(), boardSearchRequest.getSearch());
-        List<BoardDto> boardDtos = timeTypeBoards(boards);
-        return boardDtos;
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> timeTypeBoards(List<Board> boards) {
-        List<BoardDto> boardDtoList = new ArrayList<>();
-
-
-        for (Board board : boards) {
-            LocalDateTime regDate = board.getRegDate();
-            LocalDateTime now = LocalDateTime.now();
-            Duration diff = Duration.between(regDate, now);
-
-            int timeType;
-            String printDate;
-
-            if (now.toLocalDate().isEqual(regDate.toLocalDate())) {
-                long minutesDiff = diff.toMinutes();
-                if (minutesDiff < 1) {
-                    timeType = 1;
-                    printDate = "방금 전";
-                } else if (minutesDiff < 60) {
-                    timeType = 2;
-                    printDate = minutesDiff + "분 전";
-                } else {
-                    timeType = 3;
-                    printDate = minutesDiff + "분 전";
-                }
-            } else {
-                timeType = 4;
-                printDate = regDate.toLocalDate().toString();
-            }
-
-
-            BoardDto boardDto = BoardDto.fromTimeTypeAdded(board, timeType, printDate);
-            boardDtoList.add(boardDto);
-        }
-        return boardDtoList;
+    public List<BoardDto> getMyPageMainBoard(User user) {
+        List<Board> boards =boardRepository.findTop4ByBoardTypeAndUserOrderByRegDateDesc(0, user);
     }
+
 }
 
