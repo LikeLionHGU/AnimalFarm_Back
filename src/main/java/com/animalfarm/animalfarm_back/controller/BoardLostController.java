@@ -64,7 +64,7 @@ public class BoardLostController {
         try{
             boardCardResponse.setIsLogin(loginOrNot(session));
 
-            List<BoardDto> boardDtoList = boardService.getMainLostBoards();
+            List<BoardDto> boardDtoList = boardService.getMainBoards(1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -79,16 +79,19 @@ public class BoardLostController {
     public ResponseEntity<BoardCardResponse> getAllLostByNewOrder(
             @RequestBody BoardCategoryRequest request,
             HttpSession session) {
-            int category = request.getCategory();
             BoardCardResponse boardCardResponse = new BoardCardResponse();
+
             try {
                 boardCardResponse.setIsLogin(loginOrNot(session));
 
-                List<BoardDto> boardDtoList = boardService.getAll
+                List<BoardDto> boardDtoList = boardService.getAllCategoryBoardNew(request, 1);
+                boardCardResponse.setBoard(boardDtoList);
 
+                return ResponseEntity.ok(boardCardResponse);
             } catch (Exception e){
                 System.out.println(e.getMessage());
                 boardCardResponse.setBoard(null);
+
                 return ResponseEntity.ok(boardCardResponse);
             }
     }
