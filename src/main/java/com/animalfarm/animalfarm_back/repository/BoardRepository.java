@@ -20,7 +20,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAllByBoardTypeAndCategoryAndTitleOrderByRegDateDesc(int boardType, int category, String search);
 
-    List<Board> findTop4ByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
+    List<Board> findTop2ByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
 
     List<Board> findAllByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
 
