@@ -1,6 +1,7 @@
 package com.animalfarm.animalfarm_back.dto;
 
 import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.request.BoardUpdateRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,6 +72,23 @@ public class BoardDto {
                 .content(board.getContent())
                 .boardType(board.getBoardType())
                 .build();
+    }
+
+    public static BoardDto fromBoardUpdateRequest(BoardUpdateRequest boardUpdateRequest, int boardType) {
+        return BoardDto.builder()
+                .title(boardUpdateRequest.getTitle())
+                .category(boardUpdateRequest.getCategory())
+                .content(boardUpdateRequest.getContent())
+                .location(boardUpdateRequest.getLocation())
+                .longitude(boardUpdateRequest.getLongitude())
+                .latitude(boardUpdateRequest.getLatitude())
+                .detailLocation(boardUpdateRequest.getDetailLocation())
+                .phoneNum(boardUpdateRequest.getPhoneNum())
+                .boardType(boardType)
+                .isFound(0)
+                .isRead(0)
+                .build();
+
     }
 
     public static BoardDto fromBoardAdd(BoardAddRequest boardAddRequest, int boardType) {

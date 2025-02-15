@@ -89,7 +89,7 @@ public class TimeService {
         }
 
 
-        BoardDto boardDto = BoardDto.fromTimeTypeAdded(board, timeType, printDate);
+        BoardDto boardDto = BoardDto.fromDetailTimeTypeAdded(board, timeType, printDate);
         return boardDto;
     }
 }
