@@ -81,5 +81,7 @@ public class Board {
         this.boardType = boardDto.getBoardType();
         this.phoneNum = boardDto.getPhoneNum();
         this.category = boardDto.getCategory();
+        this.isFound = boardDto.getIsFound();
+        this.isRead = boardDto.getIsRead();
     }
 }

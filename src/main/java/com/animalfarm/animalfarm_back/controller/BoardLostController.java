@@ -6,7 +6,6 @@ import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
-import com.animalfarm.animalfarm_back.service.BoardLostService;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/board/lost")
 public class BoardLostController {
-    private final BoardLostService boardlostService;
     private final UserService userService;
     private final BoardService boardService;
 
