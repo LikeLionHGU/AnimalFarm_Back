@@ -61,7 +61,7 @@ public class Board {
                 .longitude(boardDto.getLongitude())
                 .detailLocation(boardDto.getDetailLocation())
                 .boardType(boardDto.getBoardType())
-                .phoneNum(boardDto.getPhoneNumber())
+                .phoneNum(boardDto.getPhoneNum())
                 .category(boardDto.getCategory())
                 .user(user)
                 .isFound(boardDto.getIsFound())
@@ -69,5 +69,18 @@ public class Board {
                 .regDate(boardDto.getRegDate())
                 .updateDate(boardDto.getUpdateDate())
                 .build();
+    }
+
+    public void update(BoardDto boardDto, String imageURL) {
+        this.title = boardDto.getTitle();
+        this.image = imageURL;
+        this.content = boardDto.getContent();
+        this.location = boardDto.getLocation();
+        this.longitude = boardDto.getLongitude();
+        this.latitude = boardDto.getLatitude();
+        this.detailLocation = boardDto.getDetailLocation();
+        this.boardType = boardDto.getBoardType();
+        this.phoneNum = boardDto.getPhoneNum();
+        this.category = boardDto.getCategory();
     }
 }

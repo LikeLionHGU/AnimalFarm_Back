@@ -103,9 +103,11 @@ public class BoardService {
         return timeTypeBoard(boardEntity);
     }
 
-    public int deleteById(Long board_id) {
+    public String deleteById(Long board_id) {
         boardRepository.deleteById(board_id);
-        return 1;
+        return "Success";
     }
+
 }
+
 
