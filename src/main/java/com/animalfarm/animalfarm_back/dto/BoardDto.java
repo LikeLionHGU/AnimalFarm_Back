@@ -39,7 +39,7 @@ public class BoardDto {
     private int timeType;
     private String printDate;
 
-    public static BoardDto fromBoardUpdateRequest(BoardUpdateRequest boardUpdateRequest, int boardType) {
+    public static BoardDto fromBoardUpdate(BoardUpdateRequest boardUpdateRequest, int boardType) {
         return BoardDto.builder()
                 .title(boardUpdateRequest.getTitle())
                 .category(boardUpdateRequest.getCategory())
