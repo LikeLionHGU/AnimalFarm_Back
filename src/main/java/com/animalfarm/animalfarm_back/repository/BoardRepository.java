@@ -29,7 +29,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAllByBoardTypeAndTitleContainingOrderByRegDateAsc(int boardType, String search);
 
-    List<Board> findTop2ByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
+    List<Board> findTop4ByUserIdAndBoardTypeOrderByRegDateDesc(String userId, int boardType);
+
+    List<Board> findTop2ByUserIdAndBoardTypeOrderByRegDateDesc(String userId, int boardType);
+
+    List<Board> findByUserIdAndBoardTypeOrderByRegDateDesc(String userId, int boardType);
+
+    List<Board> findByUserIdAndBoardTypeOrderByRegDateAsc(String userId, int boardType);
 
     List<Board> findAllByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
 
