@@ -43,7 +43,7 @@ public class BoardLostDetailResponse {
                 .longitude(boardDto.getLongitude())
                 .latitude(boardDto.getLatitude())
                 .detailLocation(boardDto.getDetailLocation())
-                .phoneNum(boardDto.getPhoneNumber())
+                .phoneNum(boardDto.getPhoneNum())
                 //.timeType()
                 .regDate(boardDto.getRegDate())
                 .updateDate(boardDto.getUpdateDate())

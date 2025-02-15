@@ -5,6 +5,7 @@ import com.animalfarm.animalfarm_back.controller.request.BoardCategoryRequest;
 import com.animalfarm.animalfarm_back.controller.request.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.BoardCardResponse;
+import com.animalfarm.animalfarm_back.controller.response.BoardFoundDetailResponse;
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -209,6 +211,35 @@ public class BoardFoundController {
             boardCardResponse.setIsLogin(0);
             boardCardResponse.setBoard(null);
             return ResponseEntity.ok().body(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/{board_id}")
+    public ResponseEntity<BoardFoundDetailResponse> showDetailFoundBoard(@PathVariable Long board_id, HttpSession session) {
+        try {
+            BoardFoundDetailResponse boardFoundDetailResponse = new BoardFoundDetailResponse();
+            if (session.getAttribute("userId") == null) {
+                boardFoundDetailResponse.setIsLogin(0);
+            } else {
+                boardFoundDetailResponse.setIsLogin(1);
+            }
+
+            user = userService.findUserById(session.getAttribute("userId").toString());
+            BoardDto boardDto = boardService.getDetailFoundBoard(board_id);
+
+            if (user.getId().equals(boardDto.getUserId())){
+                boardFoundDetailResponse.setIsUser(1);
+            } else {
+                boardFoundDetailResponse.setIsUser(0);
+            }
+
+            boardFoundDetailResponse.setBoard(boardDto);
+            return ResponseEntity.ok().body(boardFoundDetailResponse);
+        } catch (Exception e) {
+            BoardFoundDetailResponse boardFoundDetailResponse = new BoardFoundDetailResponse();
+            boardFoundDetailResponse.setIsLogin(0);
+            boardFoundDetailResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardFoundDetailResponse);
         }
     }
 }
