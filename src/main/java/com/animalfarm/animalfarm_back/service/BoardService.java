@@ -12,6 +12,7 @@ import com.animalfarm.animalfarm_back.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -121,8 +122,18 @@ public class BoardService {
         return "Success";
     }
 
-//    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image) {
-//    }
+    @Transactional
+    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image, String dirName, Long board_id) throws IOException {
+        Board board = boardRepository.findById(board_id);
+
+        File uploadFile = s3UploadService.convert(image)
+                .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+        String boardImageUrl = s3UploadService.upload(uploadFile, dirName);
+
+        board.update(boardDto, boardImageUrl);
+
+    }
+
 }
 
 
