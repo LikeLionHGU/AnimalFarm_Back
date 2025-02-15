@@ -177,9 +177,38 @@ public class BoardFoundController {
             user = userService.findUserById(session.getAttribute("userId").toString());
 
             List<BoardDto> boardDtoList = boardService.getMyPageMainBoard(user);
+            boardCardResponse.setBoard(boardDtoList);
 
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
+        }
+    }
 
+    @GetMapping("/mypage/all")
+    public ResponseEntity<BoardCardResponse> showAllMyPageBoard(HttpSession session) {
+        try {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            if (session.getAttribute("userId") == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
 
+            user = userService.findUserById(session.getAttribute("userId").toString());
+
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            boardCardResponse.setIsLogin(0);
+            boardCardResponse.setBoard(null);
+            return ResponseEntity.ok().body(boardCardResponse);
         }
     }
 }

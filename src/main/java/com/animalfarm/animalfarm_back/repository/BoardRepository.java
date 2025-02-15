@@ -22,5 +22,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findTop4ByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
 
+    List<Board> findAllByBoardTypeAndUserOrderByRegDateDesc(int boardType, User user);
+
 }
 
