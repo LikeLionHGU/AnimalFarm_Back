@@ -2,6 +2,7 @@ package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
@@ -267,6 +268,27 @@ public class BoardFoundController {
             boardCompleteResponse.setIsSuccess(0);
             return ResponseEntity.ok().body(boardCompleteResponse);
         }
+    }
+
+    @PutMapping("/{board_id}")
+    public ResponseEntity<BoardCompleteResponse> updateBoard(
+            @PathVariable Long board_id,
+            @RequestPart("board") BoardUpdateRequest boardUpdateRequest,
+            @RequestParam("image") MultipartFile image,
+            @RequestBody String imageUrl,
+            HttpSession session) {
+        try {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            if (session.getAttribute("userId") == null) {
+                boardCompleteResponse.setIsLogin(0);
+            } else {
+                boardCompleteResponse.setIsLogin(1);
+            }
+
+            BoardDto boardDto = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image);
+
+        }
+
     }
 
 }

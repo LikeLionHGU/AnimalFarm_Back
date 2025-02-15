@@ -108,6 +108,8 @@ public class BoardService {
         return timeTypeBoards(boardList);
     }
 
+    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image) {
+    }
 }
 
 
