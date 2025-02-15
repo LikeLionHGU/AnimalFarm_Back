@@ -2,6 +2,7 @@ package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardLostService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +46,6 @@ public class BoardLostController {
             user = userService.findUserById(userId);
 
             BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardAddRequest, 1), image, "va/", user);
-            System.out.println(boardDto.getTitle());
             if (boardDto == null) {
                 boardAddResponse.setIsSuccess(0);
             } else {
@@ -56,5 +57,27 @@ public class BoardLostController {
             boardAddResponse.setIsSuccess(0);
             return ResponseEntity.ok(boardAddResponse);
         }
+    }
+
+    @GetMapping("/main")
+    public ResponseEntity<BoardCardResponse> getMainBoard(HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+        try{
+            String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                boardCardResponse.setIsLogin(0);
+            } else {
+                boardCardResponse.setIsLogin(1);
+            }
+
+            List<BoardDto> boardDtoList = boardService.getMainLostBoards();
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.ok(new BoardCardResponse(0, null));
+        }
+
     }
 }

@@ -36,7 +36,8 @@ public class TimeService {
                     printDate = minutesDiff + "분 전";
                 } else {
                     timeType = 3;
-                    printDate = minutesDiff + "분 전";
+                    minutesDiff /= 60;
+                    printDate = minutesDiff + "시간 전";
                 }
             } else {
                 timeType = 4;
@@ -81,7 +82,8 @@ public class TimeService {
                 printDate = minutesDiff + "분 전";
             } else {
                 timeType = 3;
-                printDate = minutesDiff + "분 전";
+                minutesDiff /= 60;
+                printDate = minutesDiff + "시간 전";
             }
         } else {
             timeType = 4;

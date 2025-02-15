@@ -27,9 +27,7 @@ import static com.animalfarm.animalfarm_back.service.TimeService.*;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final AmazonS3 amazonS3;
     private final S3UploadService s3UploadService;
-    private final TimeService timeService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -102,6 +100,12 @@ public class BoardService {
     public String deleteById(Long board_id) {
         boardRepository.deleteById(board_id);
         return "Success";
+    }
+
+    public List<BoardDto> getMainLostBoards() {
+        List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(1);
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
     }
 
 }
