@@ -1,7 +1,7 @@
 package com.animalfarm.animalfarm_back.dto;
 
-import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.request.BoardUpdateRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,41 +38,6 @@ public class BoardDto {
 
     private int timeType;
     private String printDate;
-
-    public static BoardDto fromBoard(Board board) {
-        return BoardDto.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .image(board.getImage())
-                .content(board.getContent())
-                .location(board.getLocation())
-                .longitude(board.getLongitude())
-                .latitude(board.getLatitude())
-                .detailLocation(board.getDetailLocation())
-                .boardType(board.getBoardType())
-                .phoneNum(board.getPhoneNum())
-                .category(board.getCategory())
-                .isFound(board.getIsFound())
-                .isRead(board.getIsRead())
-                .userId(board.getUser().getId())
-                .regDate(board.getRegDate())
-                .updateDate(board.getUpdateDate())
-                .build();
-    }
-
-    public static BoardDto fromBoardAddRequest(Board board) {
-        return BoardDto.builder()
-                .title(board.getTitle())
-                .category(board.getCategory())
-                .location(board.getLocation())
-                .longitude(board.getLongitude())
-                .latitude(board.getLatitude())
-                .detailLocation(board.getDetailLocation())
-                .phoneNum(board.getPhoneNum())
-                .content(board.getContent())
-                .boardType(board.getBoardType())
-                .build();
-    }
 
     public static BoardDto fromBoardUpdateRequest(BoardUpdateRequest boardUpdateRequest, int boardType) {
         return BoardDto.builder()

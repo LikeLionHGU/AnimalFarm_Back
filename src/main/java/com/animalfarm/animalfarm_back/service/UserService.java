@@ -1,7 +1,6 @@
 package com.animalfarm.animalfarm_back.service;
 
 import com.animalfarm.animalfarm_back.domain.User;
-import com.animalfarm.animalfarm_back.dto.UserDto;
 import com.animalfarm.animalfarm_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

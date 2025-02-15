@@ -2,8 +2,8 @@ package com.animalfarm.animalfarm_back.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 
-import com.animalfarm.animalfarm_back.controller.request.BoardCategoryRequest;
-import com.animalfarm.animalfarm_back.controller.request.BoardSearchRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 
 import com.animalfarm.animalfarm_back.domain.User;
@@ -17,10 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

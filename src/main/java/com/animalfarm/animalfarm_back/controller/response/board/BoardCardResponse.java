@@ -1,14 +1,11 @@
-package com.animalfarm.animalfarm_back.controller.response;
+package com.animalfarm.animalfarm_back.controller.response.board;
 
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data

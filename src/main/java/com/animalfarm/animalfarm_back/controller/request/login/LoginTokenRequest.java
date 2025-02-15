@@ -1,4 +1,4 @@
-package com.animalfarm.animalfarm_back.controller.request;
+package com.animalfarm.animalfarm_back.controller.request.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
