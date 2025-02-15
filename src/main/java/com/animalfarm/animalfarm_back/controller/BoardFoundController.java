@@ -238,6 +238,7 @@ public class BoardFoundController {
         } catch (Exception e) {
             BoardFoundDetailResponse boardFoundDetailResponse = new BoardFoundDetailResponse();
             boardFoundDetailResponse.setIsLogin(0);
+            boardFoundDetailResponse.setIsUser(0);
             boardFoundDetailResponse.setBoard(null);
             return ResponseEntity.ok().body(boardFoundDetailResponse);
         }
