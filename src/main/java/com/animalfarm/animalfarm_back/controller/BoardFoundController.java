@@ -2,6 +2,7 @@ package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
@@ -85,7 +86,7 @@ public class BoardFoundController {
                 boardCardResponse.setIsLogin(1);
             }
 
-            List<BoardDto> boardDtoList = boardService.getMainFoundBoards();
+            List<BoardDto> boardDtoList = boardService.getMainBoards(0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -107,7 +108,7 @@ public class BoardFoundController {
                 boardCardResponse.setIsLogin(1);
             }
 
-            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardNew(boardCategoryRequest);
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardNew(boardCategoryRequest, 0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -130,7 +131,7 @@ public class BoardFoundController {
 //                boardCardResponse.setIsLogin(1);
 //            }
 //
-//            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardOld(boardCategoryRequest);
+//            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardOld(boardCategoryRequest, 0);
 //            boardCardResponse.setBoard(boardDtoList);
 //
 //            return boardCardResponse.from(boardCardResponse);
@@ -153,7 +154,7 @@ public class BoardFoundController {
 //                boardCardResponse.setIsLogin(1);
 //            }
 //
-//            List<BoardDto> boardDtoList = boardService.getAllCategoryFoundBoardSearch(boardSearchRequest);
+//            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearch(boardSearchRequest, 0);
 //            boardCardResponse.setBoard(boardDtoList);
 //
 //            return boardCardResponse.from(boardCardResponse);
@@ -177,7 +178,7 @@ public class BoardFoundController {
 
             user = userService.findUserById(session.getAttribute("userId").toString());
 
-            List<BoardDto> boardDtoList = boardService.getMyPageMainBoard(user);
+            List<BoardDto> boardDtoList = boardService.getMyPageMainBoard(user,0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -201,7 +202,7 @@ public class BoardFoundController {
 
             user = userService.findUserById(session.getAttribute("userId").toString());
 
-            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user);
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user, 0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);

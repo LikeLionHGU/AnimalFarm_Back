@@ -1,6 +1,7 @@
 package com.animalfarm.animalfarm_back.controller;
 
 import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.domain.User;
@@ -63,12 +64,7 @@ public class BoardLostController {
     public ResponseEntity<BoardCardResponse> getMainBoard(HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
         try{
-            String userId = (String) session.getAttribute("userId");
-            if (userId == null) {
-                boardCardResponse.setIsLogin(0);
-            } else {
-                boardCardResponse.setIsLogin(1);
-            }
+            boardCardResponse.setIsLogin(loginOrNot(session));
 
             List<BoardDto> boardDtoList = boardService.getMainLostBoards();
             boardCardResponse.setBoard(boardDtoList);
@@ -79,5 +75,31 @@ public class BoardLostController {
             return ResponseEntity.ok(new BoardCardResponse(0, null));
         }
 
+    }
+
+    @GetMapping("/all/category/new")
+    public ResponseEntity<BoardCardResponse> getAllLostByNewOrder(
+            @RequestBody BoardCategoryRequest request,
+            HttpSession session) {
+            int category = request.getCategory();
+            BoardCardResponse boardCardResponse = new BoardCardResponse();
+            try {
+                boardCardResponse.setIsLogin(loginOrNot(session));
+
+                List<BoardDto> boardDtoList = boardService.getAll
+
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+                boardCardResponse.setBoard(null);
+                return ResponseEntity.ok(boardCardResponse);
+            }
+    }
+
+    private int loginOrNot(HttpSession session) {
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            return 0;
+        }
+        return 1;
     }
 }

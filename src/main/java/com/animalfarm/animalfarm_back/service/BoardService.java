@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,47 +50,65 @@ public class BoardService {
     }
 
 
-    public List<BoardDto> getMainFoundBoards() {
-        List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(0);
+    public List<BoardDto> getMainBoards(int boardType) {
+        List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(boardType);
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryFoundBoardNew(BoardCategoryRequest boardCategoryRequest) {
-        List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(0, boardCategoryRequest.getCategory());
+    public List<BoardDto> getAllCategoryBoardNew(BoardCategoryRequest boardCategoryRequest, int boardType) {
+        int category = boardCategoryRequest.getCategory();
+        List<Board> boards;
+        if (category == 0) {
+            boards = boardRepository.findAllByBoardTypeOrderByRegDateDesc(boardType);
+        } else {
+            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(boardType, boardCategoryRequest.getCategory());
+        }
+
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryFoundBoardOld(BoardCategoryRequest boardCategoryRequest) {
-        List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(0, boardCategoryRequest.getCategory());
+    public List<BoardDto> getAllCategoryBoardOld(BoardCategoryRequest boardCategoryRequest, int boardType) {
+        int category = boardCategoryRequest.getCategory();
+        List<Board> boards;
+        if (category == 0) {
+            boards = boardRepository.findAllByBoardTypeOrderByRegDateAsc(boardType);
+        } else {
+            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(boardType, boardCategoryRequest.getCategory());
+        }
+
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryFoundBoardSearch(BoardSearchRequest boardSearchRequest) {
-        List<Board> boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleOrderByRegDateDesc(0, boardSearchRequest.getCategory(), boardSearchRequest.getSearch());
+    public List<BoardDto> getAllCategoryBoardSearch(BoardSearchRequest boardSearchRequest, int boardType) {
+        int category = boardSearchRequest.getCategory();
+        List<Board> boards;
+        if (category == 0) {
+            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateDesc(boardType, boardSearchRequest.getSearch());
+        } else {
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateDesc(boardType, category, boardSearchRequest.getSearch());
+        }
+
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getMyPageMainBoard(User user) {
-        List<Board> boards = boardRepository.findTop2ByBoardTypeAndUserOrderByRegDateDesc(0, user);
-        List<BoardDto> boardDtoList = timeTypeBoards(boards);
-        return boardDtoList;
+    public List<BoardDto> getMyPageMainBoard(User user, int boardType) {
+        List<Board> boards = boardRepository.findTop2ByBoardTypeAndUserOrderByRegDateDesc(boardType, user);
+        return timeTypeBoards(boards);
     }
 
-    public List<BoardDto> getAllMyPageBoard(User user) {
-        List<Board> boards = boardRepository.findAllByBoardTypeAndUserOrderByRegDateDesc(0, user);
-        List<BoardDto> boardDtoList = timeTypeBoards(boards);
-        return boardDtoList;
+    public List<BoardDto> getAllMyPageBoard(User user, int boardType) {
+        List<Board> boards = boardRepository.findAllByBoardTypeAndUserOrderByRegDateDesc(boardType, user);
+        return timeTypeBoards(boards);
     }
 
     public BoardDto getDetailFoundBoard(Long board_id) {
         Board boardEntity = null;
         Optional<Board> board = boardRepository.findById(board_id);
         if (board.isPresent()) {
-            boardEntity = new Board();
             boardEntity = board.get();
         } else {
             return null;
@@ -102,14 +121,8 @@ public class BoardService {
         return "Success";
     }
 
-    public List<BoardDto> getMainLostBoards() {
-        List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(1);
-        List<Board> boardList = timeLimitBoards(boards);
-        return timeTypeBoards(boardList);
-    }
-
-    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image) {
-    }
+//    public BoardDto updateNewBoard(BoardDto boardDto, MultipartFile image) {
+//    }
 }
 
 
