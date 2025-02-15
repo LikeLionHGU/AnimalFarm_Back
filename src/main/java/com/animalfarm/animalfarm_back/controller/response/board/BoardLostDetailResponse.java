@@ -1,4 +1,4 @@
-package com.animalfarm.animalfarm_back.controller.response;
+package com.animalfarm.animalfarm_back.controller.response.board;
 
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.UserDto;

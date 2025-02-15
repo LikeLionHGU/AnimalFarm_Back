@@ -1,14 +1,11 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.request.BoardCategoryRequest;
-import com.animalfarm.animalfarm_back.controller.request.BoardSearchRequest;
-import com.animalfarm.animalfarm_back.controller.request.BoardUpdateRequest;
-import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
-import com.animalfarm.animalfarm_back.controller.response.BoardCardResponse;
-import com.animalfarm.animalfarm_back.controller.response.BoardCompleteResponse;
-import com.animalfarm.animalfarm_back.controller.response.BoardFoundDetailResponse;
-import com.animalfarm.animalfarm_back.domain.Board;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardFoundDetailResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -22,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor

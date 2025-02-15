@@ -1,8 +1,7 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.response.BoardAddResponse;
-import com.animalfarm.animalfarm_back.domain.Board;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardLostService;

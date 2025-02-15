@@ -1,6 +1,5 @@
 package com.animalfarm.animalfarm_back.domain;
 
-import com.animalfarm.animalfarm_back.controller.request.BoardAddRequest;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

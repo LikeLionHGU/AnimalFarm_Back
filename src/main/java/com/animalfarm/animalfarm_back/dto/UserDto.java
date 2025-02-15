@@ -16,13 +16,4 @@ public class UserDto {
     private String name;
     private String email;
     private String image;
-
-    public static UserDto from(User user) {
-        return UserDto.builder()
-                .userId(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .image(user.getImage())
-                .build();
-    }
 }

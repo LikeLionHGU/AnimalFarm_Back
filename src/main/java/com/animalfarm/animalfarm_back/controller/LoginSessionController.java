@@ -1,7 +1,7 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.LoginTokenRequest;
-import com.animalfarm.animalfarm_back.controller.response.LoginStatusResponse;
+import com.animalfarm.animalfarm_back.controller.request.login.LoginTokenRequest;
+import com.animalfarm.animalfarm_back.controller.response.login.LoginStatusResponse;
 import com.animalfarm.animalfarm_back.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
