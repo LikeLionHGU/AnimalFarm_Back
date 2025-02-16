@@ -100,14 +100,17 @@ public class LoginSessionController {
         }
     }
 
-    @GetMapping("/login")
-    public String checkLoginStatus(HttpSession session) {
+    @GetMapping("/islogin")
+    public ResponseEntity<Map<String, Object>> checkLoginStatus(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
         String userId = (String) session.getAttribute("userId");
         if (userId != null) {
-            return "Logged in";
+            response.put("isLogin", 1);
         } else {
-            return "Not logged in";
+            response.put("isLogin", 0);
         }
+
+        return ResponseEntity.ok(response);
     }
 
 }
