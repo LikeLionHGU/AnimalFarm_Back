@@ -77,14 +77,9 @@ public class BoardFoundController {
 
     @GetMapping("/main")
     public ResponseEntity<BoardCardResponse> showMainBoard(HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            String userId = (String) session.getAttribute("userId");
-            if (userId == null) {
-                boardCardResponse.setIsLogin(0);
-            } else {
-                boardCardResponse.setIsLogin(1);
-            }
+            boardCardResponse.setIsLogin(loginOrNot(session));
 
             List<BoardDto> boardDtoList = boardService.getMainBoards(0);
             boardCardResponse.setBoard(boardDtoList);
@@ -98,119 +93,142 @@ public class BoardFoundController {
     }
 
     @GetMapping("/all/category/new")
-    public ResponseEntity<BoardCardResponse> showAllCategoryBoardNew(@RequestBody BoardCategoryRequest boardCategoryRequest, HttpSession session) {
+    public ResponseEntity<BoardCardResponse> showAllCategoryBoardNew(
+            @RequestBody BoardCategoryRequest boardCategoryRequest,
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            String userId = (String) session.getAttribute("userId");
-            if (userId == null) {
-                boardCardResponse.setIsLogin(0);
-            } else {
-                boardCardResponse.setIsLogin(1);
-            }
+            boardCardResponse.setIsLogin(loginOrNot(session));
 
             List<BoardDto> boardDtoList = boardService.getAllCategoryBoardNew(boardCategoryRequest, 0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
         } catch (Exception e) {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            boardCardResponse.setIsLogin(0);
-            boardCardResponse.setBoard(null);
-            return ResponseEntity.ok().body(boardCardResponse);
+            System.out.println(e.getMessage());
+            return ResponseEntity.ok(new BoardCardResponse(0, null));
         }
     }
 
-//    @GetMapping("/all/category/old")
-//    public ResponseEntity<BoardCardResponse> showCategoryBoardOld(@RequestBody BoardCategoryRequest boardCategoryRequest, HttpSession session) {
-//        try {
-//            BoardCardResponse boardCardResponse = new BoardCardResponse();
-//            String userId = (String) session.getAttribute("userId");
-//            if (userId == null) {
-//                boardCardResponse.setIsLogin(0);
-//            } else {
-//                boardCardResponse.setIsLogin(1);
-//            }
-//
-//            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardOld(boardCategoryRequest, 0);
-//            boardCardResponse.setBoard(boardDtoList);
-//
-//            return boardCardResponse.from(boardCardResponse);
-//        } catch (Exception e) {
-//            BoardCardResponse boardCardResponse = new BoardCardResponse();
-//            boardCardResponse.setIsLogin(0);
-//            boardCardResponse.setBoard(null);
-//            return ResponseEntity.ok().body(boardCardResponse);
-//        }
-//    }
-//
-//    @GetMapping("/all/category/search")
-//    public ResponseEntity<BoardCardResponse> showSearchBoard(@RequestBody BoardSearchRequest boardSearchRequest, HttpSession session) {
-//        try {
-//            BoardCardResponse boardCardResponse = new BoardCardResponse();
-//            String userId = (String) session.getAttribute("userId");
-//            if (userId == null) {
-//                boardCardResponse.setIsLogin(0);
-//            } else {
-//                boardCardResponse.setIsLogin(1);
-//            }
-//
-//            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearch(boardSearchRequest, 0);
-//            boardCardResponse.setBoard(boardDtoList);
-//
-//            return boardCardResponse.from(boardCardResponse);
-//        } catch (Exception e) {
-//            BoardCardResponse boardCardResponse = new BoardCardResponse();
-//            boardCardResponse.setIsLogin(0);
-//            boardCardResponse.setBoard(null);
-//            return ResponseEntity.ok().body(boardCardResponse);
-//        }
-//    }
+    @GetMapping("/all/category/old")
+    public ResponseEntity<BoardCardResponse> showCategoryBoardOld(
+            @RequestBody BoardCategoryRequest boardCategoryRequest,
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardOld(boardCategoryRequest, 0);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/all/category/search/new")
+    public ResponseEntity<BoardCardResponse> showAllSearchBoardNew(
+            @RequestBody BoardSearchRequest boardSearchRequest,
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchNew(boardSearchRequest, 0);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
+
+    @GetMapping("/all/category/search/old")
+    public ResponseEntity<BoardCardResponse> showAllSearchBoardOld(
+            @RequestBody BoardSearchRequest boardSearchRequest,
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchOld(boardSearchRequest, 0);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
 
     @GetMapping("/mypage/main")
-    public ResponseEntity<BoardCardResponse> showMyPageMainBoard(HttpSession session) {
+    public ResponseEntity<BoardCardResponse> showMyPageMainBoard(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            if (session.getAttribute("userId") == null) {
-                boardCardResponse.setIsLogin(0);
-            } else {
-                boardCardResponse.setIsLogin(1);
-            }
-
-            user = userService.findUserById(session.getAttribute("userId").toString());
+            boardCardResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
 
             List<BoardDto> boardDtoList = boardService.getMyPageMainBoard(user,0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
         } catch (Exception e) {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            boardCardResponse.setIsLogin(0);
+            System.out.println(e.getMessage());
             boardCardResponse.setBoard(null);
-            return ResponseEntity.ok().body(boardCardResponse);
+
+            return ResponseEntity.ok(boardCardResponse);
         }
     }
 
-    @GetMapping("/mypage/all")
-    public ResponseEntity<BoardCardResponse> showAllMyPageBoard(HttpSession session) {
+    @GetMapping("/mypage/all/new")
+    public ResponseEntity<BoardCardResponse> showAllMyPageBoardNew(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            if (session.getAttribute("userId") == null) {
-                boardCardResponse.setIsLogin(0);
-            } else {
-                boardCardResponse.setIsLogin(1);
-            }
+            boardCardResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
 
-            user = userService.findUserById(session.getAttribute("userId").toString());
-
-            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user, 0);
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoardNew(user, 0);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
         } catch (Exception e) {
-            BoardCardResponse boardCardResponse = new BoardCardResponse();
-            boardCardResponse.setIsLogin(0);
+            System.out.println(e.getMessage());
             boardCardResponse.setBoard(null);
-            return ResponseEntity.ok().body(boardCardResponse);
+
+            return ResponseEntity.ok(boardCardResponse);
+        }
+    }
+    @GetMapping("/mypage/all/old")
+    public ResponseEntity<BoardCardResponse> showAllMyPageBoardOld(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+        try {
+            boardCardResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
+
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoardOld(user, 0);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
         }
     }
 
@@ -218,13 +236,9 @@ public class BoardFoundController {
     public ResponseEntity<BoardDetailResponse> showDetailFoundBoard(@PathVariable Long board_id, HttpSession session) {
         try {
             BoardDetailResponse boardFoundDetailResponse = new BoardDetailResponse();
-            if (session.getAttribute("userId") == null) {
-                boardFoundDetailResponse.setIsLogin(0);
-            } else {
-                boardFoundDetailResponse.setIsLogin(1);
-            }
+            boardFoundDetailResponse.setIsLogin(loginOrNot(session));
 
-            user = userService.findUserById(session.getAttribute("userId").toString());
+            User user = userService.findUserById(session.getAttribute("userId").toString());
             BoardDto boardDto = boardService.getDetailFoundBoard(board_id);
 
             if (user.getId().equals(boardDto.getUserId())){
@@ -248,11 +262,7 @@ public class BoardFoundController {
     public ResponseEntity<BoardCompleteResponse> deleteBoard(@PathVariable Long board_id, HttpSession session) {
         try {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
-            if (session.getAttribute("userId") == null) {
-                boardCompleteResponse.setIsLogin(0);
-            } else {
-                boardCompleteResponse.setIsLogin(1);
-            }
+            boardCompleteResponse.setIsLogin(loginOrNot(session));
 
             String status = boardService.deleteById(board_id);
 
@@ -280,11 +290,7 @@ public class BoardFoundController {
             HttpSession session) {
         try {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
-            if (session.getAttribute("userId") == null) {
-                boardCompleteResponse.setIsLogin(0);
-            } else {
-                boardCompleteResponse.setIsLogin(1);
-            }
+            boardCompleteResponse.setIsLogin(loginOrNot(session));
 
             int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image, "va/", board_id, imageUrl);
             boardCompleteResponse.setIsSuccess(success);
@@ -296,6 +302,14 @@ public class BoardFoundController {
             return ResponseEntity.ok().body(boardCompleteResponse);
         }
 
+    }
+
+    private int loginOrNot(HttpSession session) {
+        String userId = (String) session.getAttribute("userId");
+        if (userId == null) {
+            return 0;
+        }
+        return 1;
     }
 
 }
