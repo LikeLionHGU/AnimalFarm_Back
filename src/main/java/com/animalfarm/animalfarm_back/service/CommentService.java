@@ -29,7 +29,7 @@ public class CommentService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    public CommentDto saveComment(CommentAddRequest commentAddRequest, MultipartFile image, String dirName, User newUser, Long boardId) throws IOException {
+    public CommentDto saveComment(CommentDto commentDto, MultipartFile image, String dirName, User newUser, Board newBoard) throws IOException {
         String commentImageUrl = "";
         if (!image.isEmpty()) {
             File uploadFile = s3UploadService.convert(image)
@@ -37,16 +37,7 @@ public class CommentService {
             commentImageUrl = s3UploadService.upload(uploadFile, dirName);
         }
 
-        Board board = null;
-        Optional<Board> boardOptional  = boardRepository.findById(boardId);
-        if (boardOptional.isPresent()) {
-            board = boardOptional.get();
-        } else {
-            return null;
-        }
-
-
-        Comment comment = Comment.from(commentAddRequest, commentImageUrl, newUser, board);
+        Comment comment = Comment.from(commentDto, commentImageUrl, newUser, newBoard);
         commentRepository.save(comment);
         return CommentDto.from(comment, generateImageUrl(comment.getImage()));
     }
