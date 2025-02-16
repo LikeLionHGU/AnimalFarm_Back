@@ -1,5 +1,7 @@
 package com.animalfarm.animalfarm_back.domain;
 
+import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddRequest;
+import com.animalfarm.animalfarm_back.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,4 +38,11 @@ public class Comment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy/MM/dd HH:mm", timezone = "Asia/Seoul")
     @Column(updatable = false)
     private LocalDateTime regDate;
+
+    public static Comment from(CommentAddRequest commentAddRequest, String commentUrl, User user) {
+        return Comment.builder()
+                .content(commentAddRequest.getContent())
+                .image(commentUrl)
+                .build();
+    }
 }
