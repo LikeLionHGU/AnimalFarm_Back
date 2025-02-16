@@ -19,7 +19,7 @@ public class CommentDto {
     private String image;
     private LocalDateTime regDate;
     private Long boardId;
-    private Long userId;
+    private String userId;
 
     private String printDate;
 
@@ -38,6 +38,19 @@ public class CommentDto {
                 .content(commentAddRequest.getContent())
                 .build();
     }
+
+    public static CommentDto fromEntity(Comment comment) {
+        return CommentDto.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .image(comment.getImage())
+                .regDate(comment.getRegDate())
+                .boardId(comment.getBoard().getId())
+                .userId(comment.getUser().getId())
+                .build();
+    }
+
+
 }
 
 

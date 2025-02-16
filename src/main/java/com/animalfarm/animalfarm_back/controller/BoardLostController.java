@@ -6,6 +6,7 @@ import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchReques
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
+import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -227,16 +229,36 @@ public class BoardLostController {
         }
     }
 
-//    @GetMapping("/{board_id}")
-//    public ResponseEntity<BoardDetailResponse> getBoardDetail(
-//        @PathVariable Long board_id,
-//        HttpSession session) {
-//        BoardDetailResponse boardDetailResponse = new BoardDetailResponse();
-//        try {
-//            boardDetailResponse.setIsLogin(loginOrNot(session));
-//            String userId = (String) session.getAttribute("userId");
-//        }
-//    }
+    @GetMapping("/{board_id}")
+    public ResponseEntity<BoardDetailResponse> getBoardDetail(
+        @PathVariable Long board_id,
+        HttpSession session) {
+        BoardDetailResponse boardDetailResponse = new BoardDetailResponse();
+        try {
+            boardDetailResponse.setIsLogin(loginOrNot(session));
+            String userId = (String) session.getAttribute("userId");
+
+            BoardDto board = boardService.getDetailLostBoard(board_id);
+            if (board == null) {
+                boardDetailResponse.setIsUser(0);
+                boardDetailResponse.setBoard(null);
+                return ResponseEntity.ok(boardDetailResponse);
+            }
+
+            if (Objects.equals(board.getUserId(), userId)) {
+                boardDetailResponse.setIsUser(1);
+            } else {
+                boardDetailResponse.setIsUser(0);
+            }
+            boardDetailResponse.setBoard(board);
+
+            return ResponseEntity.ok(boardDetailResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardDetailResponse.setBoard(null);
+            return ResponseEntity.ok(boardDetailResponse);
+        }
+    }
 
 
 

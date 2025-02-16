@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -38,6 +41,10 @@ public class BoardDto {
 
     private int timeType;
     private String printDate;
+
+    private List<CommentDto> comments ;
+
+
 
     public static BoardDto fromBoardUpdate(BoardUpdateRequest boardUpdateRequest, int boardType) {
         return BoardDto.builder()
@@ -120,6 +127,32 @@ public class BoardDto {
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
                 .userName(board.getUser().getName())
+                .build();
+    }
+
+
+
+    public static BoardDto fromDetailTimeTypeAddedLost(Board board,String printDate) {
+        return BoardDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .category(board.getCategory())
+                .content(board.getContent())
+                .image(board.getImage())
+                .location(board.getLocation())
+                .longitude(board.getLongitude())
+                .latitude(board.getLatitude())
+                .detailLocation(board.getDetailLocation())
+                .phoneNum(board.getPhoneNum())
+                .printDate(printDate)
+                .regDate(board.getRegDate())
+                .updateDate(board.getUpdateDate())
+                .userName(board.getUser().getName())
+                .comments(board.getComments() != null ?
+                        board.getComments().stream()
+                                .map(CommentDto::fromEntity)
+                                .collect(Collectors.toList()) :
+                        Collections.emptyList())
                 .build();
     }
 }
