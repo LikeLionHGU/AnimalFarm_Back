@@ -100,5 +100,14 @@ public class LoginSessionController {
         }
     }
 
+    @GetMapping("/login")
+    public String checkLoginStatus(HttpSession session) {
+        String userId = (String) session.getAttribute("userId");
+        if (userId != null) {
+            return "Logged in";
+        } else {
+            return "Not logged in";
+        }
+    }
 
 }
