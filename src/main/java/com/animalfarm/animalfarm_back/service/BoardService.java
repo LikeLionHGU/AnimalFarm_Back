@@ -111,9 +111,9 @@ public class BoardService {
 
         List<Board> boards = new ArrayList<>();
         if (boardType == 1) {
-            boards = boardRepository.findTop4ByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+            boards = boardRepository.findTop4ByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
         } else {
-            boards = boardRepository.findTop2ByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+            boards = boardRepository.findTop2ByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
         }
 
         if (boards.isEmpty())
@@ -127,7 +127,7 @@ public class BoardService {
     public List<BoardDto> getAllMyPageBoard(User user, int boardType) {
         List<Board> boards;
 
-        boards = boardRepository.findByUserIdAndBoardTypeOrderByRegDateDesc(user.getId(), boardType);
+        boards = boardRepository.findByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
