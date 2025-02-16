@@ -183,7 +183,7 @@ public class BoardLostController {
         }
     }
 
-    @GetMapping("/mypage/all")
+    @GetMapping("/mypage/all/new")
     public ResponseEntity<BoardCardResponse> getMypageLostMainAllNewOrder(
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
@@ -193,7 +193,7 @@ public class BoardLostController {
             String userId = (String) session.getAttribute("userId");
             User user = userService.findUserById(userId);
 
-            List<BoardDto> boardDtoList = boardService.getAllMyPageBoard(user, 1);
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoardNew(user, 1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -205,16 +205,38 @@ public class BoardLostController {
         }
     }
 
-    @GetMapping("/{board_id}")
-    public ResponseEntity<BoardDetailResponse> getBoardDetail(
-        @PathVariable Long board_id,
-        HttpSession session) {
-        BoardDetailResponse boardDetailResponse = new BoardDetailResponse();
+    @GetMapping("/mypage/all/old")
+    public ResponseEntity<BoardCardResponse> getMypageLostMainAllOldOrder(
+            HttpSession session) {
+        BoardCardResponse boardCardResponse = new BoardCardResponse();
+
         try {
-            boardDetailResponse.setIsLogin(loginOrNot(session));
+            boardCardResponse.setIsLogin(loginOrNot(session));
             String userId = (String) session.getAttribute("userId");
+            User user = userService.findUserById(userId);
+
+            List<BoardDto> boardDtoList = boardService.getAllMyPageBoardOld(user, 1);
+            boardCardResponse.setBoard(boardDtoList);
+
+            return ResponseEntity.ok(boardCardResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCardResponse.setBoard(null);
+
+            return ResponseEntity.ok(boardCardResponse);
         }
     }
+
+//    @GetMapping("/{board_id}")
+//    public ResponseEntity<BoardDetailResponse> getBoardDetail(
+//        @PathVariable Long board_id,
+//        HttpSession session) {
+//        BoardDetailResponse boardDetailResponse = new BoardDetailResponse();
+//        try {
+//            boardDetailResponse.setIsLogin(loginOrNot(session));
+//            String userId = (String) session.getAttribute("userId");
+//        }
+//    }
 
 
 
