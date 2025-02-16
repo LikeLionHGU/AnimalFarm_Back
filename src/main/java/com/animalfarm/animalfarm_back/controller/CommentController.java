@@ -3,6 +3,7 @@ package com.animalfarm.animalfarm_back.controller;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
+import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -24,6 +25,7 @@ public class CommentController {
     private final CommentService commentService;
     private final UserService userService;
     User user = null;
+    Board board = null;
 
     @PostMapping("/add/{board_id}")
     public ResponseEntity<BoardAddResponse> addComment(
@@ -44,7 +46,9 @@ public class CommentController {
                 user = userService.findUserById(session.getAttribute("userId").toString());
             }
 
-            CommentDto commentDto = commentService.saveComment(commentAddRequest, image, "/va", user, board_id);
+            board = boardService.findBoardById(board_id);
+
+            CommentDto commentDto = commentService.saveComment(CommentDto.fromCommentAdd(commentAddRequest), image, "/va", user, board);
             if (commentDto == null) {
                 boardAddResponse.setIsSuccess(0);
             }

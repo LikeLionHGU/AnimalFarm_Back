@@ -31,7 +31,7 @@ public class Comment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn (name = "board_id" ,nullable = false)
     private Board board;
 
     @CreatedDate
@@ -39,9 +39,9 @@ public class Comment {
     @Column(updatable = false)
     private LocalDateTime regDate;
 
-    public static Comment from(CommentAddRequest commentAddRequest, String commentUrl, User user, Board board) {
+    public static Comment from(CommentDto commentDto, String commentUrl, User user, Board board) {
         return Comment.builder()
-                .content(commentAddRequest.getContent())
+                .content(commentDto.getContent())
                 .image(commentUrl)
                 .user(user)
                 .board(board)
