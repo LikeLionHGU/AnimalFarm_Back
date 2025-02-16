@@ -4,8 +4,8 @@ import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddReque
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.Comment;
 import com.animalfarm.animalfarm_back.domain.User;
-import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
+import com.animalfarm.animalfarm_back.repository.BoardRepository;
 import com.animalfarm.animalfarm_back.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,12 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
     private final S3UploadService s3UploadService;
+    private final BoardRepository boardRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -27,7 +29,7 @@ public class CommentService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    public CommentDto saveComment(CommentAddRequest commentAddRequest, MultipartFile image, String dirName, User newUser) throws IOException {
+    public CommentDto saveComment(CommentAddRequest commentAddRequest, MultipartFile image, String dirName, User newUser, Long boardId) throws IOException {
         String commentImageUrl = "";
         if (!image.isEmpty()) {
             File uploadFile = s3UploadService.convert(image)
@@ -35,7 +37,16 @@ public class CommentService {
             commentImageUrl = s3UploadService.upload(uploadFile, dirName);
         }
 
-        Comment comment = Comment.from(commentAddRequest, commentImageUrl, newUser);
+        Board board = null;
+        Optional<Board> boardOptional  = boardRepository.findById(boardId);
+        if (boardOptional.isPresent()) {
+            board = boardOptional.get();
+        } else {
+            return null;
+        }
+
+
+        Comment comment = Comment.from(commentAddRequest, commentImageUrl, newUser, board);
         commentRepository.save(comment);
         return CommentDto.from(comment, generateImageUrl(comment.getImage()));
     }
