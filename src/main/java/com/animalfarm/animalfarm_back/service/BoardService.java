@@ -124,10 +124,18 @@ public class BoardService {
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllMyPageBoard(User user, int boardType) {
+    public List<BoardDto> getAllMyPageBoardNew(User user, int boardType) {
         List<Board> boards;
 
         boards = boardRepository.findByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
+        List<Board> boardList = timeLimitBoards(boards);
+        return timeTypeBoards(boardList);
+    }
+
+    public List<BoardDto> getAllMyPageBoardOld(User user, int boardType) {
+        List<Board> boards;
+
+        boards = boardRepository.findByUserAndBoardTypeOrderByRegDateAsc(user, boardType);
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
