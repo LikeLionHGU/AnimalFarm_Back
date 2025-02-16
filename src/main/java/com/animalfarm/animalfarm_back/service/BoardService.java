@@ -141,14 +141,25 @@ public class BoardService {
     }
 
     public BoardDto getDetailFoundBoard(Long board_id) {
-        Board boardEntity = null;
+        Board boardEntity;
         Optional<Board> board = boardRepository.findById(board_id);
         if (board.isPresent()) {
             boardEntity = board.get();
         } else {
             return null;
         }
-        return timeTypeBoard(boardEntity);
+        return timeTypeBoard(boardEntity, 0);
+    }
+
+    public BoardDto getDetailLostBoard(Long board_id) {
+        Board boardEntity;
+        Optional<Board> board = boardRepository.findById(board_id);
+        if (board.isPresent()) {
+            boardEntity = board.get();
+        } else {
+            return null;
+        }
+        return timeTypeBoard(boardEntity, 1);
     }
 
     public String deleteById(Long board_id) {

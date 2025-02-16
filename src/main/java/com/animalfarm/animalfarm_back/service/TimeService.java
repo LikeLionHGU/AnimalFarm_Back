@@ -64,7 +64,7 @@ public class TimeService {
         return newBoards;
     }
 
-    public static BoardDto timeTypeBoard(Board board) {
+    public static BoardDto timeTypeBoard(Board board, int type) {
         LocalDateTime regDate = board.getRegDate();
         LocalDateTime now = LocalDateTime.now();
         Duration diff = Duration.between(regDate, now);
@@ -89,9 +89,13 @@ public class TimeService {
             timeType = 4;
             printDate = regDate.toLocalDate().toString();
         }
+        BoardDto boardDto;
+        if (type == 0) {
+           boardDto = BoardDto.fromDetailTimeTypeAdded(board, timeType, printDate);
+        } else {
+            boardDto = BoardDto.fromDetailTimeTypeAddedLost(board, printDate);
+        }
 
-
-        BoardDto boardDto = BoardDto.fromDetailTimeTypeAdded(board, timeType, printDate);
         return boardDto;
     }
 }

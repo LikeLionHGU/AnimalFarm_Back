@@ -30,7 +30,7 @@ public class CommentController {
     @PostMapping("/add/{board_id}")
     public ResponseEntity<BoardAddResponse> addComment(
             @PathVariable("board_id") Long board_id,
-            @RequestPart("comment") CommentAddRequest commentAddRequest,
+            @RequestPart("content") CommentAddRequest commentAddRequest,
             @RequestParam("image") MultipartFile image,
             HttpSession session){
         BoardAddResponse boardAddResponse = new BoardAddResponse();
@@ -48,7 +48,7 @@ public class CommentController {
 
             board = boardService.findBoardById(board_id);
 
-            CommentDto commentDto = commentService.saveComment(CommentDto.fromCommentAdd(commentAddRequest), image, "/va", user, board);
+            CommentDto commentDto = commentService.saveComment(CommentDto.fromCommentAdd(commentAddRequest), image, "va/", user, board);
             if (commentDto == null) {
                 boardAddResponse.setIsSuccess(0);
             }

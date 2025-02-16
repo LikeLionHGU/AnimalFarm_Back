@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -238,10 +239,11 @@ public class BoardFoundController {
             BoardDetailResponse boardFoundDetailResponse = new BoardDetailResponse();
             boardFoundDetailResponse.setIsLogin(loginOrNot(session));
 
-            User user = userService.findUserById(session.getAttribute("userId").toString());
+            String userId = (String) session.getAttribute("userId");
+
             BoardDto boardDto = boardService.getDetailFoundBoard(board_id);
 
-            if (user.getId().equals(boardDto.getUserId())){
+            if (Objects.equals(boardDto.getUserId(), userId)){
                 boardFoundDetailResponse.setIsUser(1);
             } else {
                 boardFoundDetailResponse.setIsUser(0);
