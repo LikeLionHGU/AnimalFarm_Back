@@ -44,7 +44,7 @@ public class CommentController {
                 user = userService.findUserById(session.getAttribute("userId").toString());
             }
 
-            CommentDto commentDto = commentService.saveComment(commentAddRequest, image, "/va", user);
+            CommentDto commentDto = commentService.saveComment(commentAddRequest, image, "/va", user, board_id);
             if (commentDto == null) {
                 boardAddResponse.setIsSuccess(0);
             }
