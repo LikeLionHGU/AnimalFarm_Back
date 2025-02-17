@@ -78,14 +78,14 @@ public class BoardLostController {
 
     @GetMapping("/all/category/new")
     public ResponseEntity<BoardCardResponse> getAllLostByNewOrder(
-            @RequestBody BoardCategoryRequest request,
+            @RequestParam int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
         try {
             boardCardResponse.setIsLogin(loginOrNot(session));
 
-            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardNew(request, 1);
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardNew(category, 1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -99,14 +99,14 @@ public class BoardLostController {
 
     @GetMapping("/all/category/old")
     public ResponseEntity<BoardCardResponse> getAllLostByOldOrder(
-            @RequestBody BoardCategoryRequest request,
+            @RequestParam int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
         try {
             boardCardResponse.setIsLogin(loginOrNot(session));
 
-            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardOld(request, 1);
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardOld(category, 1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -120,14 +120,14 @@ public class BoardLostController {
 
     @GetMapping("/all/category/search/new")
     public ResponseEntity<BoardCardResponse> getAllLostBySearchNewOrder(
-            @RequestBody BoardSearchRequest request,
+            @RequestParam("input") BoardSearchRequest boardSearchRequest,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
         try {
             boardCardResponse.setIsLogin(loginOrNot(session));
 
-            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchNew(request, 1);
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchNew(boardSearchRequest, 1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
@@ -141,14 +141,14 @@ public class BoardLostController {
 
     @GetMapping("/all/category/search/old")
     public ResponseEntity<BoardCardResponse> getAllLostBySearchOldOrder(
-            @RequestBody BoardSearchRequest request,
+            @RequestParam("input") BoardSearchRequest boardSearchRequest,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
         try {
             boardCardResponse.setIsLogin(loginOrNot(session));
 
-            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchOld(request, 1);
+            List<BoardDto> boardDtoList = boardService.getAllCategoryBoardSearchOld(boardSearchRequest, 1);
             boardCardResponse.setBoard(boardDtoList);
 
             return ResponseEntity.ok(boardCardResponse);
