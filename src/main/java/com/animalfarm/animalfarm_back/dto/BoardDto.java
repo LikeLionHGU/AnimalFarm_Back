@@ -103,6 +103,7 @@ public class BoardDto {
         return BoardDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
+                .content(board.getContent())
                 .category(board.getCategory())
                 .image(board.getImage())
                 .timeType(timeType)
