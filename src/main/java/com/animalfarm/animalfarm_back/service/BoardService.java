@@ -79,26 +79,24 @@ public class BoardService {
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryBoardSearchNew(BoardSearchRequest boardSearchRequest, int boardType) {
-        int category = boardSearchRequest.getCategory();
+    public List<BoardDto> getAllCategoryBoardSearchNew(int category, String search, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateDesc(boardType, boardSearchRequest.getSearch());
+            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateDesc(boardType, search);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateDesc(boardType, category, boardSearchRequest.getSearch());
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateDesc(boardType, category, search);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryBoardSearchOld(BoardSearchRequest boardSearchRequest, int boardType) {
-        int category = boardSearchRequest.getCategory();
+    public List<BoardDto> getAllCategoryBoardSearchOld(int category, String search, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateAsc(boardType, boardSearchRequest.getSearch());
+            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateAsc(boardType, search);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateAsc(boardType, category, boardSearchRequest.getSearch());
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateAsc(boardType, category, search);
         }
 
         List<Board> boardList = timeLimitBoards(boards);

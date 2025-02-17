@@ -10,7 +10,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://lostnfoundservice.netlify.app/")
+                .allowedOrigins("https://lostnfoundservice.netlify.app/", "http://localhost:3000/")
                 .allowedMethods("*")
                 .allowCredentials(true)
                 .allowCredentials(true);
