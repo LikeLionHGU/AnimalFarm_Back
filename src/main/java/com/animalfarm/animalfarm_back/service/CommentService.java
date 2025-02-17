@@ -1,6 +1,5 @@
 package com.animalfarm.animalfarm_back.service;
 
-import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.Comment;
 import com.animalfarm.animalfarm_back.domain.User;
@@ -14,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
