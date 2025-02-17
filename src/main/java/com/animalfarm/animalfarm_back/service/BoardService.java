@@ -55,26 +55,24 @@ public class BoardService {
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryBoardNew(BoardCategoryRequest boardCategoryRequest, int boardType) {
-        int category = boardCategoryRequest.getCategory();
+    public List<BoardDto> getAllCategoryBoardNew(int category, int boardType) {
         List<Board> boards;
         if (category == 0) {
             boards = boardRepository.findAllByBoardTypeOrderByRegDateDesc(boardType);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(boardType, boardCategoryRequest.getCategory());
+            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(boardType, category);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
 
-    public List<BoardDto> getAllCategoryBoardOld(BoardCategoryRequest boardCategoryRequest, int boardType) {
-        int category = boardCategoryRequest.getCategory();
+    public List<BoardDto> getAllCategoryBoardOld(int category, int boardType) {
         List<Board> boards;
         if (category == 0) {
             boards = boardRepository.findAllByBoardTypeOrderByRegDateAsc(boardType);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(boardType, boardCategoryRequest.getCategory());
+            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(boardType, category);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
