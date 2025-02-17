@@ -281,6 +281,25 @@ public class BoardLostController {
         }
     }
 
+    @DeleteMapping("/{board_id}")
+    public ResponseEntity<BoardAddResponse> deleteBoard(
+            @PathVariable Long board_id,
+            HttpSession session) {
+        BoardAddResponse boardAddResponse = new BoardAddResponse();
+        try {
+            boardAddResponse.setIsLogin(loginOrNot(session));
+            int status = boardService.deleteById(board_id);
+            boardAddResponse.setIsSuccess(status);
+
+            return ResponseEntity.ok(boardAddResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardAddResponse.setIsSuccess(0);
+            return ResponseEntity.ok(boardAddResponse);
+        }
+    }
+
+
     private int loginOrNot(HttpSession session) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {

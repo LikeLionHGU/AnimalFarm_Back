@@ -162,9 +162,13 @@ public class BoardService {
         return timeTypeBoard(boardEntity, 1);
     }
 
-    public String deleteById(Long board_id) {
-        boardRepository.deleteById(board_id);
-        return "Success";
+    public int deleteById(Long board_id) {
+        try {
+            boardRepository.deleteById(board_id);
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Transactional
