@@ -266,13 +266,9 @@ public class BoardFoundController {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
             boardCompleteResponse.setIsLogin(loginOrNot(session));
 
-            String status = boardService.deleteById(board_id);
+            int status = boardService.deleteById(board_id);
 
-            if (status.equals("Success")) {
-                boardCompleteResponse.setIsSuccess(1);
-            } else {
-                boardCompleteResponse.setIsSuccess(0);
-            }
+            boardCompleteResponse.setIsSuccess(status);
 
             return ResponseEntity.ok().body(boardCompleteResponse);
         } catch (Exception e) {
