@@ -1,12 +1,9 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.*;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
-import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -257,6 +254,30 @@ public class BoardLostController {
             System.out.println(e.getMessage());
             boardDetailResponse.setBoard(null);
             return ResponseEntity.ok(boardDetailResponse);
+        }
+    }
+
+    @PutMapping("/{board_id}")
+    public ResponseEntity<BoardAddResponse> updateBoard(
+            @PathVariable Long board_id,
+            @RequestPart("board") BoardUpdateRequest boardUpdateRequest,
+            @RequestParam("image") MultipartFile image,
+            @RequestPart("url") UrlRequest urlRequest,
+            HttpSession session){
+        BoardAddResponse boardAddResponse = new BoardAddResponse();
+        try {
+            boardAddResponse.setIsLogin(loginOrNot(session));
+            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 1), image, "va/", board_id, urlRequest.getUrl());
+            if (success == 1) {
+                boardAddResponse.setIsSuccess(1);
+            } else {
+                boardAddResponse.setIsSuccess(0);
+            }
+            return ResponseEntity.ok(boardAddResponse);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            boardAddResponse.setIsSuccess(0);
+            return ResponseEntity.ok(boardAddResponse);
         }
     }
 
