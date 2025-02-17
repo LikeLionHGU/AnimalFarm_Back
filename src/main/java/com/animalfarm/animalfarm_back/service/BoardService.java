@@ -109,7 +109,7 @@ public class BoardService {
         if (boardType == 1) {
             boards = boardRepository.findTop4ByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
         } else {
-            boards = boardRepository.findTop2ByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
+            boards = boardRepository.findTop4ByUserAndBoardTypeOrderByRegDateDesc(user, boardType);
         }
 
         if (boards.isEmpty())
