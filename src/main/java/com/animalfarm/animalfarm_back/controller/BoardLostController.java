@@ -3,7 +3,9 @@ package com.animalfarm.animalfarm_back.controller;
 import com.animalfarm.animalfarm_back.controller.request.board.*;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
+import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -310,4 +312,27 @@ public class BoardLostController {
         }
         return 1;
     }
+
+    @PutMapping("/complete/{board_id}")
+    public ResponseEntity<BoardCompleteResponse> completeBoard(
+            @PathVariable Long board_id,
+            HttpSession session) {
+        BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+        try {
+            boardCompleteResponse.setIsLogin(loginOrNot(session));
+
+            int success = boardService.updateIsFound(BoardDto.fromUpdateIsFound(), board_id);
+            if (success == 1) {
+                boardCompleteResponse.setIsSuccess(1);
+            } else {
+                boardCompleteResponse.setIsSuccess(0);
+            }
+            return ResponseEntity.ok(boardCompleteResponse);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            boardCompleteResponse.setIsSuccess(0);
+            return ResponseEntity.ok(boardCompleteResponse);
+        }
+    }
+
 }

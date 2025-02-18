@@ -110,4 +110,9 @@ public class Board {
         this.isFound = boardDto.getIsFound();
         this.isRead = boardDto.getIsRead();
     }
+
+    public void updateIsFound(BoardDto boardDto) {
+        this.isFound = boardDto.getIsFound();
+    }
+
 }

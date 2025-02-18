@@ -156,4 +156,10 @@ public class BoardDto {
                         Collections.emptyList())
                 .build();
     }
+
+    public static BoardDto fromUpdateIsFound() {
+        return BoardDto.builder()
+                .isFound(1)
+                .build();
+    }
 }
