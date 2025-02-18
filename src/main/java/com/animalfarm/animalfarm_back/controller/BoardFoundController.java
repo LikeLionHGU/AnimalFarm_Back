@@ -4,15 +4,13 @@ import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
-import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
-import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
-import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
-import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
+import com.animalfarm.animalfarm_back.controller.response.board.*;
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.SawPeopleDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
+import com.animalfarm.animalfarm_back.service.SawPeopleService;
 import com.animalfarm.animalfarm_back.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +29,7 @@ import java.util.Objects;
 public class BoardFoundController {
     private final BoardService boardService;
     private final UserService userService;
+    private final SawPeopleService sawPeopleService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -325,13 +324,44 @@ public class BoardFoundController {
 
             User user = userService.findUserById(board.getUser().getId());
 
+            SawPeopleDto sawPeopleDto = sawPeopleService.save(board, user);
 
+            if (sawPeopleDto.getUserName().isEmpty()) {
+                boardCompleteResponse.setIsSuccess(0);
+            } else {
+                boardCompleteResponse.setIsSuccess(1);
+            }
+
+            return ResponseEntity.ok().body(boardCompleteResponse);
 
         } catch (Exception e) {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
             boardCompleteResponse.setIsLogin(0);
             boardCompleteResponse.setIsSuccess(0);
             return ResponseEntity.ok().body(boardCompleteResponse);
+        }
+    }
+
+    @GetMapping("saw/{board_id}")
+    public ResponseEntity<SawPeopleResponse> showSawPeopleList(@PathVariable Long board_id, HttpSession session) {
+        try {
+            SawPeopleResponse sawPeopleResponse = new SawPeopleResponse();
+            sawPeopleResponse.setIsLogin(loginOrNot(session));
+
+            Board board = boardService.findById(board_id);
+
+            User user = userService.findUserById(board.getUser().getId());
+
+            List<SawPeopleDto> sawPeopleDtoList = sawPeopleService.getSawPeopleList(board, user);
+
+            sawPeopleResponse.setPeople(sawPeopleDtoList);
+
+            return ResponseEntity.ok().body(sawPeopleResponse);
+        } catch (Exception e) {
+            SawPeopleResponse sawPeopleResponse = new SawPeopleResponse();
+            sawPeopleResponse.setIsLogin(0);
+            sawPeopleResponse.setPeople(null);
+            return ResponseEntity.ok().body(sawPeopleResponse);
         }
     }
 
