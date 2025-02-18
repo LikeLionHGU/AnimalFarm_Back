@@ -7,6 +7,7 @@ import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
 import com.animalfarm.animalfarm_back.repository.CommentRepository;
 import com.animalfarm.animalfarm_back.repository.NotificationRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class CommentService {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    @Transactional
     public CommentDto saveComment(CommentDto commentDto, MultipartFile image, String dirName, User newUser, Board newBoard) throws IOException {
         String commentImageUrl = "";
         if (!image.isEmpty()) {
@@ -44,7 +46,7 @@ public class CommentService {
             Notification notification;
             if (!existNotification.isEmpty()) {
                 notification = existNotification.get(0);
-                notification.setIsRead(0);
+                notification.update();
             } else {
                 notification = Notification.from(newUser, newBoard, comment);
                 notificationRepository.save(notification);

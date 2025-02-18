@@ -56,4 +56,12 @@ public class Notification {
                 .isRead(0)
                 .build();
     }
+
+    public void update() {
+        this.isRead = 0;
+    }
+
+    public void update2Read() {
+        this.isRead = 1;
+    }
 }
