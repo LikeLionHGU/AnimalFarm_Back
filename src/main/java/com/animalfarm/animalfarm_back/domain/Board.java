@@ -59,6 +59,14 @@ public class Board {
     @Builder.Default
     private List<Notification> notifications = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "board",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Builder.Default
+    private List<SawPeople> sawPeopleList = new ArrayList<>();
+
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy/MM/dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(updatable = false)
