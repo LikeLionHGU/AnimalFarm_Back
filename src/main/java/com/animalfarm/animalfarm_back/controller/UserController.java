@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 public class UserController {
 
@@ -16,7 +14,7 @@ public class UserController {
         UserDetailResponse userDetailResponse = new UserDetailResponse();
         userDetailResponse.setIsLogin(loginOrNot(session));
         try {
-            userDetailResponse.setUsername((String) session.getAttribute("username"));
+            userDetailResponse.setUsername((String) session.getAttribute("name"));
             userDetailResponse.setEmail((String) session.getAttribute("email"));
             userDetailResponse.setImage((String) session.getAttribute("pictureUrl"));
 
