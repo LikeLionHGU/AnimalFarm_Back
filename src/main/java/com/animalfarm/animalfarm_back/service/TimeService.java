@@ -2,8 +2,10 @@ package com.animalfarm.animalfarm_back.service;
 
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.Comment;
+import com.animalfarm.animalfarm_back.domain.Notification;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
+import com.animalfarm.animalfarm_back.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +72,23 @@ public class TimeService {
         }
 
         return boardDto;
+    }
+
+    public static List<NotificationDto> timeNotification(List<Notification> notifications) {
+        List<NotificationDto> notificationDtos = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Notification notification : notifications) {
+            LocalDateTime regDate = notification.getUpdateDate();
+            Duration diff = Duration.between(regDate, now);
+
+            String printDate = calculateTimeTypeAndPrintDate(regDate, now, diff);
+
+            Board board = notification.getBoard();
+            NotificationDto notificationDto = NotificationDto.from(board, printDate);
+            notificationDtos.add(notificationDto);
+        }
+        return notificationDtos;
     }
 
     private static String calculateTimeTypeAndPrintDate(LocalDateTime regDate, LocalDateTime now, Duration diff) {

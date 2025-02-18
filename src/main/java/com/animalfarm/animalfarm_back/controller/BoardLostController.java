@@ -237,7 +237,8 @@ public class BoardLostController {
             boardDetailResponse.setIsLogin(loginOrNot(session));
             String userId = (String) session.getAttribute("userId");
 
-            BoardDto board = boardService.getDetailLostBoard(board_id);
+            User user = userService.findUserById(userId);
+            BoardDto board = boardService.getDetailLostBoard(board_id, user);
             if (board == null) {
                 boardDetailResponse.setIsUser(0);
                 boardDetailResponse.setBoard(null);

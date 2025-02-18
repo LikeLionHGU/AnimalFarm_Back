@@ -68,6 +68,7 @@ public class BoardFoundController {
 
             return ResponseEntity.ok().body(boardAddResponse);
         } catch (Exception e) {
+            //////////////////////////////////////////////////////////  확인 필요
             BoardAddResponse errorResponse = BoardAddResponse.builder()
                     .isLogin(1) // 로그인 확인 함수 필요
                     .isSuccess(0)
