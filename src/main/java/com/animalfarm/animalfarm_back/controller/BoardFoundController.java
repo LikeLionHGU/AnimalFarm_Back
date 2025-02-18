@@ -316,27 +316,24 @@ public class BoardFoundController {
 
     @PostMapping("saw/{board_id}")
     public ResponseEntity<BoardCompleteResponse> sawBoard(@PathVariable Long board_id, HttpSession session) {
+
+        BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+        int loginOrNot = loginOrNot(session);
         try {
-            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
-            boardCompleteResponse.setIsLogin(loginOrNot(session));
-
+            boardCompleteResponse.setIsLogin(loginOrNot);
             Board board = boardService.findById(board_id);
+            String userId = (String) session.getAttribute("userId");
 
-            User user = userService.findUserById(board.getUser().getId());
+            User user = userService.findUserById(userId);
 
-            SawPeopleDto sawPeopleDto = sawPeopleService.save(board, user);
+            sawPeopleService.save(board, user);
 
-            if (sawPeopleDto.getUserName().isEmpty()) {
-                boardCompleteResponse.setIsSuccess(0);
-            } else {
-                boardCompleteResponse.setIsSuccess(1);
-            }
+            boardCompleteResponse.setIsSuccess(1);
 
             return ResponseEntity.ok().body(boardCompleteResponse);
 
         } catch (Exception e) {
-            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
-            boardCompleteResponse.setIsLogin(0);
+            boardCompleteResponse.setIsLogin(loginOrNot);
             boardCompleteResponse.setIsSuccess(0);
             return ResponseEntity.ok().body(boardCompleteResponse);
         }
@@ -344,9 +341,11 @@ public class BoardFoundController {
 
     @GetMapping("saw/{board_id}")
     public ResponseEntity<SawPeopleResponse> showSawPeopleList(@PathVariable Long board_id, HttpSession session) {
+        int loginOrNot = loginOrNot(session);
+        SawPeopleResponse sawPeopleResponse = new SawPeopleResponse();
+
         try {
-            SawPeopleResponse sawPeopleResponse = new SawPeopleResponse();
-            sawPeopleResponse.setIsLogin(loginOrNot(session));
+            sawPeopleResponse.setIsLogin(loginOrNot);
 
             Board board = boardService.findById(board_id);
 
@@ -355,12 +354,12 @@ public class BoardFoundController {
             List<SawPeopleDto> sawPeopleDtoList = sawPeopleService.getSawPeopleList(board, user);
 
             sawPeopleResponse.setPeople(sawPeopleDtoList);
-
+            sawPeopleResponse.setIsSuccess(1);
             return ResponseEntity.ok().body(sawPeopleResponse);
         } catch (Exception e) {
-            SawPeopleResponse sawPeopleResponse = new SawPeopleResponse();
-            sawPeopleResponse.setIsLogin(0);
+            sawPeopleResponse.setIsLogin(loginOrNot);
             sawPeopleResponse.setPeople(null);
+            sawPeopleResponse.setIsSuccess(0);
             return ResponseEntity.ok().body(sawPeopleResponse);
         }
     }
