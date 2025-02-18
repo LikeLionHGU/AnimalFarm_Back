@@ -8,8 +8,10 @@ import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
+import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
+import com.animalfarm.animalfarm_back.dto.SawPeopleDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -310,6 +312,26 @@ public class BoardFoundController {
             return 0;
         }
         return 1;
+    }
+
+    @PostMapping("saw/{board_id}")
+    public ResponseEntity<BoardCompleteResponse> sawBoard(@PathVariable Long board_id, HttpSession session) {
+        try {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            boardCompleteResponse.setIsLogin(loginOrNot(session));
+
+            Board board = boardService.findById(board_id);
+
+            User user = userService.findUserById(board.getUser().getId());
+
+
+
+        } catch (Exception e) {
+            BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
+            boardCompleteResponse.setIsLogin(0);
+            boardCompleteResponse.setIsSuccess(0);
+            return ResponseEntity.ok().body(boardCompleteResponse);
+        }
     }
 
 }

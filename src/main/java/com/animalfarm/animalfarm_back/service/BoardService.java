@@ -194,6 +194,10 @@ public class BoardService {
         return boardRepository.findById(boardId).orElse(null);
     }
 
+    public Board findById(Long board_id) {
+        return boardRepository.findById(board_id).orElse(null);
+    }
+
 }
 
 
