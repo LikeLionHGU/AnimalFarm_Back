@@ -44,7 +44,7 @@ public class User {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "board",
+            mappedBy = "user",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)

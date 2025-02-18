@@ -20,7 +20,7 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column (name = "notification_id")
     private Long id;
 
     @ManyToOne
