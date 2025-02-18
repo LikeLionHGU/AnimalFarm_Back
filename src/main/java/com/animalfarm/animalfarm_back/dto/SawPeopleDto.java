@@ -2,6 +2,7 @@ package com.animalfarm.animalfarm_back.dto;
 
 
 import com.animalfarm.animalfarm_back.domain.Board;
+import com.animalfarm.animalfarm_back.domain.SawPeople;
 import com.animalfarm.animalfarm_back.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,17 +17,12 @@ import java.time.LocalDateTime;
 @Builder
 public class SawPeopleDto {
 
-    private Long boardId;
     private String userName;
-    private LocalDateTime regDate;
 
-    public static SawPeopleDto from(Board board, User user) {
+    public static SawPeopleDto fromSawPeople(SawPeople sawPeople) {
         return SawPeopleDto.builder()
-                .boardId(board.getId())
-                .userName(user.getName())
+                .userName(sawPeople.getUser().getName())
                 .build();
     }
 
-    public static SawPeopleDto fromSawPeopleAdd(Board board, User user) {
-    }
 }
