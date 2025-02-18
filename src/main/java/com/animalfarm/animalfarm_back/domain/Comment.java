@@ -23,7 +23,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column (name = "comment_id")
     private Long id;
     private String content;
     private String image;
@@ -37,7 +37,7 @@ public class Comment {
     private Board board;
 
     @OneToMany(
-            mappedBy = "board",
+            mappedBy = "comment",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true)

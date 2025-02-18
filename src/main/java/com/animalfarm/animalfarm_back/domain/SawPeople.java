@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 public class SawPeople {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "sawpeople_id")
     private Long id;
 
     @ManyToOne
