@@ -211,6 +211,21 @@ public class BoardService {
         return boardRepository.findById(board_id).orElse(null);
     }
 
+    @Transactional
+    public int updateIsFound(BoardDto boardDto, Long board_id) {
+        Board board = null;
+        Optional<Board> boardOptional = boardRepository.findById(board_id);
+
+        if (boardOptional.isPresent()) {
+            board = boardOptional.get();
+        } else {
+            return 0;
+        }
+
+        board.updateIsFound(boardDto);
+        return 1;
+    }
+
 }
 
 
