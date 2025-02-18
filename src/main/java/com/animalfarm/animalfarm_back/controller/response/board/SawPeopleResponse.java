@@ -16,4 +16,5 @@ public class SawPeopleResponse {
 
     private int isLogin;
     private List<SawPeopleDto> people;
+    private int isSuccess;
 }

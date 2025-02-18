@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface SawPeopleRepository extends JpaRepository<SawPeople, Long> {
 
-    List<SawPeople> findAllByBoardAndUser(Board board, User user);
+    List<SawPeople> findAllByBoard(Board board);
 
 }
