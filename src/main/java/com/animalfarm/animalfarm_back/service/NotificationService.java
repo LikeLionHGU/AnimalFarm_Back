@@ -14,10 +14,11 @@ import static com.animalfarm.animalfarm_back.service.TimeService.timeNotificatio
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
 
     public List<NotificationDto> getAllNotifications(User user) {
         List<Notification> notifications = notificationRepository.findByUserAndIsRead(user, 0);
         return timeNotification(notifications);
     }
 }
+
