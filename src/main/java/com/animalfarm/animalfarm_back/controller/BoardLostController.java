@@ -46,6 +46,7 @@ public class BoardLostController {
                 return ResponseEntity.ok(boardAddResponse);
             }
             user = userService.findUserById(userId);
+            boardAddResponse.setIsLogin(loginOrNot(session));
 
             BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardAddRequest, 1), image, "va/", user);
             if (boardDto == null) {
