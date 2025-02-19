@@ -10,23 +10,23 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> findTop4ByBoardTypeOrderByRegDateDesc(int boardType);
+    List<Board> findTop4ByBoardTypeAndIsFoundOrderByRegDateDesc(int boardType, int isFound);
 
-    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateDesc(int boardType, int category);
+    List<Board> findAllByBoardTypeAndCategoryAndIsFoundOrderByRegDateDesc(int boardType, int category, int isFound);
 
-    List<Board> findAllByBoardTypeOrderByRegDateDesc(int boardType);
+    List<Board> findAllByBoardTypeAndIsFoundOrderByRegDateDesc(int boardType, int isFound);
 
-    List<Board> findAllByBoardTypeAndCategoryOrderByRegDateAsc(int boardType, int category);
+    List<Board> findAllByBoardTypeAndCategoryAndIsFoundOrderByRegDateAsc(int boardType, int category, int isFound);
 
-    List<Board> findAllByBoardTypeOrderByRegDateAsc(int boardType);
+    List<Board> findAllByBoardTypeAndIsFoundOrderByRegDateAsc(int boardType, int isFound);
 
-    List<Board> findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateDesc(int boardType, int category, String search);
+    List<Board> findAllByBoardTypeAndCategoryAndTitleContainingAndIsFoundOrderByRegDateDesc(int boardType, int category, String search, int isFound);
 
-    List<Board> findAllByBoardTypeAndTitleContainingOrderByRegDateDesc(int boardType, String search);
+    List<Board> findAllByBoardTypeAndTitleContainingAndIsFoundOrderByRegDateDesc(int boardType, String search, int isFound);
 
-    List<Board> findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateAsc(int boardType, int category, String search);
+    List<Board> findAllByBoardTypeAndCategoryAndTitleContainingAndIsFoundOrderByRegDateAsc(int boardType, int category, String search, int isFound);
 
-    List<Board> findAllByBoardTypeAndTitleContainingOrderByRegDateAsc(int boardType, String search);
+    List<Board> findAllByBoardTypeAndTitleContainingAndIsFoundOrderByRegDateAsc(int boardType, String search, int isFound);
 
     List<Board> findTop4ByUserAndBoardTypeOrderByRegDateDesc(User user, int boardType);
 

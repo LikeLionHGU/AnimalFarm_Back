@@ -56,7 +56,7 @@ public class BoardService {
 
 
     public List<BoardDto> getMainBoards(int boardType) {
-        List<Board> boards = boardRepository.findTop4ByBoardTypeOrderByRegDateDesc(boardType);
+        List<Board> boards = boardRepository.findTop4ByBoardTypeAndIsFoundOrderByRegDateDesc(boardType, 0);
         List<Board> boardList = timeLimitBoards(boards);
         return timeTypeBoards(boardList);
     }
@@ -64,9 +64,9 @@ public class BoardService {
     public List<BoardDto> getAllCategoryBoardNew(int category, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeOrderByRegDateDesc(boardType);
+            boards = boardRepository.findAllByBoardTypeAndIsFoundOrderByRegDateDesc(boardType, 0);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateDesc(boardType, category);
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndIsFoundOrderByRegDateDesc(boardType, category, 0);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
@@ -76,9 +76,9 @@ public class BoardService {
     public List<BoardDto> getAllCategoryBoardOld(int category, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeOrderByRegDateAsc(boardType);
+            boards = boardRepository.findAllByBoardTypeAndIsFoundOrderByRegDateAsc(boardType, 0);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryOrderByRegDateAsc(boardType, category);
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndIsFoundOrderByRegDateAsc(boardType, category, 0);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
@@ -88,9 +88,9 @@ public class BoardService {
     public List<BoardDto> getAllCategoryBoardSearchNew(int category, String search, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateDesc(boardType, search);
+            boards = boardRepository.findAllByBoardTypeAndTitleContainingAndIsFoundOrderByRegDateDesc(boardType, search, 0);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateDesc(boardType, category, search);
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingAndIsFoundOrderByRegDateDesc(boardType, category, search, 0);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
@@ -100,9 +100,9 @@ public class BoardService {
     public List<BoardDto> getAllCategoryBoardSearchOld(int category, String search, int boardType) {
         List<Board> boards;
         if (category == 0) {
-            boards = boardRepository.findAllByBoardTypeAndTitleContainingOrderByRegDateAsc(boardType, search);
+            boards = boardRepository.findAllByBoardTypeAndTitleContainingAndIsFoundOrderByRegDateAsc(boardType, search, 0);
         } else {
-            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingOrderByRegDateAsc(boardType, category, search);
+            boards = boardRepository.findAllByBoardTypeAndCategoryAndTitleContainingAndIsFoundOrderByRegDateAsc(boardType, category, search, 0);
         }
 
         List<Board> boardList = timeLimitBoards(boards);
