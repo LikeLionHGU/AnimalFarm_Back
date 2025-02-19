@@ -242,10 +242,11 @@ public class BoardLostController {
             if (userId == null) {
                 userId = "1";
             }
+            int isUser = loginOrNot(session);
 
             User user = userService.findUserById(userId);
 
-            BoardDto board = boardService.getDetailLostBoard(board_id, user);
+            BoardDto board = boardService.getDetailLostBoard(board_id, user, isUser);
 
             System.out.println("user board 불러와짐");
             if (board == null) {

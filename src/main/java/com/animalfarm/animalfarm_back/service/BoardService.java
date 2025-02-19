@@ -4,10 +4,12 @@ import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequ
 import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 
+import com.animalfarm.animalfarm_back.domain.Notification;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.repository.BoardRepository;
 //import com.animalfarm.animalfarm_back.repository.NotificationRepository;
+import com.animalfarm.animalfarm_back.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final S3UploadService s3UploadService;
+    private final NotificationRepository notificationRepository;
 //    private final NotificationRepository notificationRepository;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -151,7 +154,8 @@ public class BoardService {
     }
 
 
-    public BoardDto getDetailLostBoard(Long board_id, User presentUser) {
+    @Transactional
+    public BoardDto getDetailLostBoard(Long board_id, User presentUser, int isUser) {
         Board boardEntity;
 
         Optional<Board> board = boardRepository.findById(board_id);
@@ -159,6 +163,14 @@ public class BoardService {
             boardEntity = board.get();
         } else {
             return null;
+        }
+
+        if (isUser==1){
+            Optional<Notification> notificationOptional = notificationRepository.findByBoard(boardEntity);
+            if (notificationOptional.isPresent()) {
+                Notification notification = notificationOptional.get();
+                notification.update2Read();
+            }
         }
 
         return timeTypeBoard(boardEntity, 1);
