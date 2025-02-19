@@ -238,12 +238,19 @@ public class BoardLostController {
         try {
             boardDetailResponse.setIsLogin(loginOrNot(session));
             String userId = (String) session.getAttribute("userId");
+            if (userId == null) {
+                userId = "1";
+            }
 
             User user = userService.findUserById(userId);
+
             BoardDto board = boardService.getDetailLostBoard(board_id, user);
+
+            System.out.println("user board 불러와짐");
             if (board == null) {
                 boardDetailResponse.setIsUser(0);
                 boardDetailResponse.setBoard(null);
+                System.out.println("보드 못찾음");
                 return ResponseEntity.ok(boardDetailResponse);
             }
 

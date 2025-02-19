@@ -2,10 +2,10 @@ package com.animalfarm.animalfarm_back.service;
 
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.Comment;
-import com.animalfarm.animalfarm_back.domain.Notification;
+
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
-import com.animalfarm.animalfarm_back.dto.NotificationDto;
+//import com.animalfarm.animalfarm_back.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,12 +61,15 @@ public class TimeService {
         if (type == 0) {
             boardDto = BoardDto.fromDetailTimeTypeAdded(board, getTimeTypeBasedOnPrintDate(printDate), printDate);
         } else {
+
             boardDto = BoardDto.fromDetailTimeTypeAddedLost(board, printDate);
+
             List<CommentDto> comments = boardDto.getComments();
             for (CommentDto comment : comments) {
                 Duration diffComment = Duration.between(comment.getRegDate(), now);
                 comment.setPrintDate(calculateTimeTypeAndPrintDate(comment.getRegDate(), now, diffComment));
             }
+            System.out.println("시간 조작 완");
             boardDto.setComments(comments);
 
         }
@@ -74,22 +77,22 @@ public class TimeService {
         return boardDto;
     }
 
-    public static List<NotificationDto> timeNotification(List<Notification> notifications) {
-        List<NotificationDto> notificationDtos = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
-
-        for (Notification notification : notifications) {
-            LocalDateTime regDate = notification.getUpdateDate();
-            Duration diff = Duration.between(regDate, now);
-
-            String printDate = calculateTimeTypeAndPrintDate(regDate, now, diff);
-
-            Board board = notification.getBoard();
-            NotificationDto notificationDto = NotificationDto.from(board, printDate);
-            notificationDtos.add(notificationDto);
-        }
-        return notificationDtos;
-    }
+//    public static List<NotificationDto> timeNotification(List<Notification> notifications) {
+//        List<NotificationDto> notificationDtos = new ArrayList<>();
+//        LocalDateTime now = LocalDateTime.now();
+//
+//        for (Notification notification : notifications) {
+//            LocalDateTime regDate = notification.getUpdateDate();
+//            Duration diff = Duration.between(regDate, now);
+//
+//            String printDate = calculateTimeTypeAndPrintDate(regDate, now, diff);
+//
+//            Board board = notification.getBoard();
+//            NotificationDto notificationDto = NotificationDto.from(board, printDate);
+//            notificationDtos.add(notificationDto);
+//        }
+//        return notificationDtos;
+//    }
 
     private static String calculateTimeTypeAndPrintDate(LocalDateTime regDate, LocalDateTime now, Duration diff) {
         String printDate;
