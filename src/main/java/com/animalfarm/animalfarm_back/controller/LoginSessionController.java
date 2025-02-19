@@ -83,23 +83,6 @@ public class LoginSessionController {
         }
     }
 
-    @GetMapping("/status")
-    public ResponseEntity<Map<String, Object>> getCurrentUser(HttpSession session) {
-        String userId = (String) session.getAttribute("userId");
-        String email = (String) session.getAttribute("email");
-        String name = (String) session.getAttribute("name");
-
-        if (userId != null) {
-            return ResponseEntity.ok(Map.of(
-                    "id", userId,
-                    "email", email,
-                    "name", name
-            ));
-        } else {
-            return ResponseEntity.status(401).body(Collections.singletonMap("error", "User not logged in"));
-        }
-    }
-
     @GetMapping("/islogin")
     public ResponseEntity<Map<String, Object>> checkLoginStatus(HttpSession session) {
         Map<String, Object> response = new HashMap<>();

@@ -1,9 +1,6 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardInfoRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.*;
 import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
@@ -37,7 +34,7 @@ public class BoardFoundController {
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @RequestPart("board") BoardAddRequest boardAddRequest,
+            @RequestPart("board") BoardInfoRequest boardInfoRequest,
             @RequestParam("image") MultipartFile image,
             HttpSession session) throws IOException {
         try {
@@ -45,7 +42,7 @@ public class BoardFoundController {
             if (session.getAttribute("userId") == null) {
                 user = userService.findUserById("1");
                 if (user == null) {
-                    userService.saveOrUpdateUser("1", "익명", "익명", "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
+                    userService.saveOrUpdateUser("1", "익명", "익명", "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/jumeok.png");
                     user = userService.findUserById("1");
                 }
             } else {
@@ -53,7 +50,7 @@ public class BoardFoundController {
             }
 
 
-            BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardAddRequest, 0), image, "va/", user);
+            BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardInfoRequest, 0), image, "va/", user);
 
             BoardAddResponse boardAddResponse = new BoardAddResponse();
             if (session.getAttribute("userId") == null) {
@@ -286,7 +283,7 @@ public class BoardFoundController {
     @PutMapping("/{board_id}")
     public ResponseEntity<BoardCompleteResponse> updateBoard(
             @PathVariable Long board_id,
-            @RequestPart("board") BoardUpdateRequest boardUpdateRequest,
+            @RequestPart("board") BoardInfoRequest boardInfoRequest,
             @RequestParam("image") MultipartFile image,
             @RequestBody String imageUrl,
             HttpSession session) {
@@ -294,7 +291,7 @@ public class BoardFoundController {
             BoardCompleteResponse boardCompleteResponse = new BoardCompleteResponse();
             boardCompleteResponse.setIsLogin(loginOrNot(session));
 
-            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 0), image, "va/", board_id, imageUrl);
+            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardInfoRequest, 0), image, "va/", board_id, imageUrl);
             boardCompleteResponse.setIsSuccess(success);
             return ResponseEntity.ok().body(boardCompleteResponse);
         } catch (Exception e) {

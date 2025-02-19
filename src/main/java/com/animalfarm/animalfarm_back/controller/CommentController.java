@@ -1,6 +1,5 @@
 package com.animalfarm.animalfarm_back.controller;
 
-import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
 import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddRequest;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse;
 import com.animalfarm.animalfarm_back.domain.Board;
@@ -39,7 +38,7 @@ public class CommentController {
             if (session.getAttribute("userId") == null) {
                 user = userService.findUserById("1");
                 if (user == null) {
-                    userService.saveOrUpdateUser("1", "익명", "익명", "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/profile.png");
+                    userService.saveOrUpdateUser("1", "익명", "익명", "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/jumeok.png");
                     user = userService.findUserById("1");
                 }
             } else {

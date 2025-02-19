@@ -28,6 +28,7 @@ public class UserController {
         }
     }
 
+
     private int loginOrNot(HttpSession session) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {

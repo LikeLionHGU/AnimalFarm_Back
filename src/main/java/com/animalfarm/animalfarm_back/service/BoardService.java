@@ -1,14 +1,10 @@
 package com.animalfarm.animalfarm_back.service;
 
-import com.animalfarm.animalfarm_back.controller.request.board.BoardCategoryRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardSearchRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
-
 import com.animalfarm.animalfarm_back.domain.Notification;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.repository.BoardRepository;
-//import com.animalfarm.animalfarm_back.repository.NotificationRepository;
 import com.animalfarm.animalfarm_back.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.animalfarm.animalfarm_back.service.TimeService.*;
@@ -33,7 +28,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final S3UploadService s3UploadService;
     private final NotificationRepository notificationRepository;
-//    private final NotificationRepository notificationRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -155,7 +149,7 @@ public class BoardService {
 
 
     @Transactional
-    public BoardDto getDetailLostBoard(Long board_id, User presentUser, int isUser) {
+    public BoardDto getDetailLostBoard(Long board_id, int isUser) {
         Board boardEntity;
 
         Optional<Board> board = boardRepository.findById(board_id);
