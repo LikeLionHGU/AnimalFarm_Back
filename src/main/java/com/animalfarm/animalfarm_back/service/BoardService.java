@@ -218,17 +218,24 @@ public class BoardService {
 
     @Transactional
     public int updateIsFound(BoardDto boardDto, Long board_id) {
-        Board board = null;
-        Optional<Board> boardOptional = boardRepository.findById(board_id);
+        try {
+            Board board = null;
+            Optional<Board> boardOptional = boardRepository.findById(board_id);
 
-        if (boardOptional.isPresent()) {
-            board = boardOptional.get();
-        } else {
+            if (boardOptional.isPresent()) {
+                board = boardOptional.get();
+            } else {
+                return 0;
+            }
+
+            board.updateIsFound();
+            return 1;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return 0;
         }
 
-        board.updateIsFound(boardDto);
-        return 1;
     }
 
 }

@@ -51,13 +51,13 @@ public class Board {
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-//    @OneToMany(
-//            mappedBy = "board",
-//            fetch = FetchType.LAZY,
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true)
-//    @Builder.Default
-//    private List<Notification> notifications = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "board",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Builder.Default
+    private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "board",
@@ -111,8 +111,8 @@ public class Board {
         this.isRead = boardDto.getIsRead();
     }
 
-    public void updateIsFound(BoardDto boardDto) {
-        this.isFound = boardDto.getIsFound();
+    public void updateIsFound() {
+        this.isFound = 1;
     }
 
 }

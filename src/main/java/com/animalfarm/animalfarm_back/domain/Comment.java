@@ -37,13 +37,13 @@ public class Comment {
     @JoinColumn (name = "board_id" ,nullable = false)
     private Board board;
 
-//    @OneToMany(
-//            mappedBy = "comment",
-//            fetch = FetchType.LAZY,
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true)
-//    @Builder.Default
-//    private List<Notification> notifications = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "comment",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @Builder.Default
+    private List<Notification> notifications = new ArrayList<>();
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy/MM/dd HH:mm", timezone = "Asia/Seoul")

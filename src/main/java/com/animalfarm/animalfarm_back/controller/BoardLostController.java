@@ -322,7 +322,7 @@ public class BoardLostController {
         return 1;
     }
 
-    @PutMapping("/complete/{board_id}")
+    @GetMapping("/complete/{board_id}")
     public ResponseEntity<BoardCompleteResponse> completeBoard(
             @PathVariable Long board_id,
             HttpSession session) {
@@ -330,12 +330,8 @@ public class BoardLostController {
         try {
             boardCompleteResponse.setIsLogin(loginOrNot(session));
 
-            int success = boardService.updateIsFound(BoardDto.fromUpdateIsFound(), board_id);
-            if (success == 1) {
-                boardCompleteResponse.setIsSuccess(1);
-            } else {
-                boardCompleteResponse.setIsSuccess(0);
-            }
+            boardCompleteResponse.setIsSuccess(boardService.updateIsFound(BoardDto.fromUpdateIsFound(), board_id));
+
             return ResponseEntity.ok(boardCompleteResponse);
         } catch (Exception e) {
             System.out.println(e.getMessage());
