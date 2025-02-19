@@ -6,7 +6,6 @@ import com.animalfarm.animalfarm_back.domain.Comment;
 import com.animalfarm.animalfarm_back.domain.Notification;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
-//import com.animalfarm.animalfarm_back.dto.NotificationDto;
 import com.animalfarm.animalfarm_back.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

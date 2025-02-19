@@ -5,7 +5,6 @@ import com.animalfarm.animalfarm_back.controller.response.board.BoardAddResponse
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCardResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardCompleteResponse;
 import com.animalfarm.animalfarm_back.controller.response.board.BoardDetailResponse;
-import com.animalfarm.animalfarm_back.domain.Board;
 import com.animalfarm.animalfarm_back.domain.User;
 import com.animalfarm.animalfarm_back.dto.BoardDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
@@ -34,9 +33,9 @@ public class BoardLostController {
 
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
-            @RequestPart("board") BoardAddRequest boardAddRequest,
+            @RequestPart("board") BoardInfoRequest boardInfoRequest,
             @RequestParam("image") MultipartFile image,
-            HttpSession session) throws IOException {
+            HttpSession session){
         BoardAddResponse boardAddResponse = new BoardAddResponse();
         try {
             String userId = (String) session.getAttribute("userId");
@@ -48,7 +47,7 @@ public class BoardLostController {
             user = userService.findUserById(userId);
             boardAddResponse.setIsLogin(loginOrNot(session));
 
-            BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardAddRequest, 1), image, "va/", user);
+            BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardInfoRequest, 1), image, "va/", user);
             if (boardDto == null) {
                 boardAddResponse.setIsSuccess(0);
             } else {
@@ -244,9 +243,7 @@ public class BoardLostController {
             }
             int isUser = loginOrNot(session);
 
-            User user = userService.findUserById(userId);
-
-            BoardDto board = boardService.getDetailLostBoard(board_id, user, isUser);
+            BoardDto board = boardService.getDetailLostBoard(board_id, isUser);
 
             System.out.println("user board 불러와짐");
             if (board == null) {
@@ -274,14 +271,14 @@ public class BoardLostController {
     @PutMapping("/{board_id}")
     public ResponseEntity<BoardAddResponse> updateBoard(
             @PathVariable Long board_id,
-            @RequestPart("board") BoardUpdateRequest boardUpdateRequest,
+            @RequestPart("board") BoardInfoRequest boardInfoRequest,
             @RequestParam("image") MultipartFile image,
             @RequestPart("url") UrlRequest urlRequest,
             HttpSession session){
         BoardAddResponse boardAddResponse = new BoardAddResponse();
         try {
             boardAddResponse.setIsLogin(loginOrNot(session));
-            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardUpdateRequest, 1), image, "va/", board_id, urlRequest.getUrl());
+            int success = boardService.updateNewBoard(BoardDto.fromBoardUpdate(boardInfoRequest, 1), image, "va/", board_id, urlRequest.getUrl());
             if (success == 1) {
                 boardAddResponse.setIsSuccess(1);
             } else {

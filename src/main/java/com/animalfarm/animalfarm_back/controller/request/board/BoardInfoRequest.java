@@ -5,16 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BoardUpdateRequest {
-
+@AllArgsConstructor
+public class BoardInfoRequest {
     private String title;
     private int category;
-    private String content;
     private String location;
     private double longitude;
     private double latitude;
     private String detailLocation;
     private String phoneNum;
+    private String content;
 }

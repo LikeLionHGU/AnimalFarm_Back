@@ -1,7 +1,6 @@
 package com.animalfarm.animalfarm_back.dto;
 
-import com.animalfarm.animalfarm_back.controller.request.board.BoardAddRequest;
-import com.animalfarm.animalfarm_back.controller.request.board.BoardUpdateRequest;
+import com.animalfarm.animalfarm_back.controller.request.board.BoardInfoRequest;
 import com.animalfarm.animalfarm_back.domain.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,7 +45,7 @@ public class BoardDto {
 
 
 
-    public static BoardDto fromBoardUpdate(BoardUpdateRequest boardUpdateRequest, int boardType) {
+    public static BoardDto fromBoardUpdate(BoardInfoRequest boardUpdateRequest, int boardType) {
         return BoardDto.builder()
                 .title(boardUpdateRequest.getTitle())
                 .category(boardUpdateRequest.getCategory())
@@ -63,7 +62,7 @@ public class BoardDto {
 
     }
 
-    public static BoardDto fromBoardAdd(BoardAddRequest boardAddRequest, int boardType) {
+    public static BoardDto fromBoardAdd(BoardInfoRequest boardAddRequest, int boardType) {
         return BoardDto.builder()
                 .title(boardAddRequest.getTitle())
                 .content(boardAddRequest.getContent())

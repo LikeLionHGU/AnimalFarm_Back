@@ -1,6 +1,5 @@
 package com.animalfarm.animalfarm_back.domain;
 
-import com.animalfarm.animalfarm_back.controller.request.comment.CommentAddRequest;
 import com.animalfarm.animalfarm_back.dto.CommentDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
