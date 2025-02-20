@@ -31,10 +31,6 @@ public class Notification {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id", nullable = false)
-    private Comment comment;
-
     private int isRead;
 
 
@@ -52,7 +48,6 @@ public class Notification {
         return  Notification.builder()
                 .user(newuser)
                 .board(newboard)
-                .comment(newcomment)
                 .isRead(0)
                 .build();
     }

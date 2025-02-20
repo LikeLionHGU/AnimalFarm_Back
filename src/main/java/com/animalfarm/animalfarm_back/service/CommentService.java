@@ -58,15 +58,15 @@ public class CommentService {
         return CommentDto.from(comment, generateImageUrl(comment.getImage()));
     }
 
-    public CommentDto saveCommentWithoutImage(CommentDto commentDto, User newUser, Board newBoard) throws IOException {
+    public CommentDto saveCommentWithoutImage(CommentDto commentDto, User sessionUser, Board board) throws IOException {
 
-        Comment comment = Comment.fromWithoutImage(commentDto, newUser, newBoard);
+        Comment comment = Comment.fromWithoutImage(commentDto, sessionUser, board);
         commentRepository.save(comment);
 
-        Optional<Notification> notificationOptional = notificationRepository.findByBoard(newBoard);
+        Optional<Notification> notificationOptional = notificationRepository.findByBoard(board);
         Notification notification;
         if (notificationOptional.isEmpty()) {
-            notification = Notification.from(newBoard.getUser(),newBoard, comment);
+            notification = Notification.from(board.getUser(),board, comment);
             notificationRepository.save(notification);
         } else {
             notification = notificationOptional.get();

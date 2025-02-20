@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.animalfarm.animalfarm_back.service.TimeService.*;
@@ -156,7 +157,7 @@ public class BoardService {
 
 
     @Transactional
-    public BoardDto getDetailLostBoard(Long board_id, int isUser) {
+    public BoardDto getDetailLostBoard(Long board_id, User user) {
         Board boardEntity;
 
         Optional<Board> board = boardRepository.findById(board_id);
@@ -165,14 +166,18 @@ public class BoardService {
         } else {
             return null;
         }
-
-        if (isUser==1){
-            Optional<Notification> notificationOptional = notificationRepository.findByBoard(boardEntity);
-            if (notificationOptional.isPresent()) {
-                Notification notification = notificationOptional.get();
-                notification.update2Read();
+        if (!Objects.equals(user.getId(), "1")) {
+            if (Objects.equals(user.getId(), boardEntity.getUser().getId())) {
+                Optional<Notification> notificationOptional = notificationRepository.findByBoard(boardEntity);
+                if (notificationOptional.isPresent()) {
+                    Notification notification = notificationOptional.get();
+                    notification.update2Read();
+                }
             }
+
         }
+
+
 
         return timeTypeBoard(boardEntity, 1);
     }

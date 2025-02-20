@@ -241,16 +241,13 @@ public class BoardLostController {
             if (userId == null) {
                 userId = "1";
             }
-            int isUser = loginOrNot(session);
+            User user = userService.findUserById(userId);
+            BoardDto board = boardService.getDetailLostBoard(board_id, user);
 
-            BoardDto board = boardService.getDetailLostBoard(board_id, isUser);
-
-            System.out.println("user board 불러와짐");
-            if (board == null) {
+            if (Objects.equals(board.getUserId(), userId)) {
+                boardDetailResponse.setIsUser(1);
+            } else {
                 boardDetailResponse.setIsUser(0);
-                boardDetailResponse.setBoard(null);
-                System.out.println("보드 못찾음");
-                return ResponseEntity.ok(boardDetailResponse);
             }
 
             if (Objects.equals(board.getUserId(), userId)) {
@@ -263,6 +260,7 @@ public class BoardLostController {
             return ResponseEntity.ok(boardDetailResponse);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            boardDetailResponse.setIsUser(0);
             boardDetailResponse.setBoard(null);
             return ResponseEntity.ok(boardDetailResponse);
         }
