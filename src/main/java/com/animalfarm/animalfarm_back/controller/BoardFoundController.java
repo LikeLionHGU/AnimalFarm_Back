@@ -92,7 +92,7 @@ public class BoardFoundController {
 
     @GetMapping("/all/category/new")
     public ResponseEntity<BoardCardResponse> showAllCategoryBoardNew(
-            @RequestParam int category,
+            @RequestParam(defaultValue = "0") int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
@@ -110,7 +110,7 @@ public class BoardFoundController {
 
     @GetMapping("/all/category/old")
     public ResponseEntity<BoardCardResponse> showCategoryBoardOld(
-            @RequestParam int category,
+            @RequestParam(defaultValue = "0") int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
         try {
@@ -130,7 +130,7 @@ public class BoardFoundController {
 
     @GetMapping("/all/category/search/new")
     public ResponseEntity<BoardCardResponse> showAllSearchBoardNew(
-            @RequestParam("category") int category,
+            @RequestParam(value = "category", defaultValue = "0") int category,
             @RequestParam("search") String search,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
@@ -151,7 +151,7 @@ public class BoardFoundController {
 
     @GetMapping("/all/category/search/old")
     public ResponseEntity<BoardCardResponse> showAllSearchBoardOld(
-            @RequestParam("category") int category,
+            @RequestParam(value = "category", defaultValue = "0") int category,
             @RequestParam("search") String search,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
@@ -346,7 +346,7 @@ public class BoardFoundController {
 
             User user = userService.findUserById(board.getUser().getId());
 
-            List<SawPeopleDto> sawPeopleDtoList = sawPeopleService.getSawPeopleList(board, user);
+            List<SawPeopleDto> sawPeopleDtoList = sawPeopleService.getSawPeopleList(board);
 
             sawPeopleResponse.setPeople(sawPeopleDtoList);
             sawPeopleResponse.setIsSuccess(1);
