@@ -38,7 +38,7 @@ public class SawPeopleService {
         }
     }
 
-    public List<SawPeopleDto> getSawPeopleList(Board board, User user) {
+    public List<SawPeopleDto> getSawPeopleList(Board board) {
         List<SawPeople> sawPeople = sawPeopleRepository.findAllByBoard(board);
         List<SawPeopleDto> sawPeopleDtoList = new ArrayList<>();
         for (SawPeople sawPerson : sawPeople) {

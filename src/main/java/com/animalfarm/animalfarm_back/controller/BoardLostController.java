@@ -80,7 +80,7 @@ public class BoardLostController {
 
     @GetMapping("/all/category/new")
     public ResponseEntity<BoardCardResponse> getAllLostByNewOrder(
-            @RequestParam int category,
+            @RequestParam(defaultValue = "0") int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
@@ -101,7 +101,7 @@ public class BoardLostController {
 
     @GetMapping("/all/category/old")
     public ResponseEntity<BoardCardResponse> getAllLostByOldOrder(
-            @RequestParam int category,
+            @RequestParam(defaultValue = "0")int category,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
 
@@ -122,7 +122,7 @@ public class BoardLostController {
 
     @GetMapping("/all/category/search/new")
     public ResponseEntity<BoardCardResponse> getAllLostBySearchNewOrder(
-            @RequestParam("category") int category,
+            @RequestParam(value = "category", defaultValue = "0") int category,
             @RequestParam("search") String search,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
@@ -144,7 +144,7 @@ public class BoardLostController {
 
     @GetMapping("/all/category/search/old")
     public ResponseEntity<BoardCardResponse> getAllLostBySearchOldOrder(
-            @RequestParam("category") int category,
+            @RequestParam(value = "category", defaultValue = "0") int category,
             @RequestParam("search") String search,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
