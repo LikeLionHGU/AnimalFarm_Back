@@ -47,7 +47,15 @@ public class CommentController {
 
             board = boardService.findBoardById(board_id);
 
-            CommentDto commentDto = commentService.saveComment(CommentDto.fromCommentAdd(commentAddRequest), image, "va/", user, board);
+            CommentDto commentDto;
+
+            if (image == null) {
+                commentDto = commentService.saveCommentWithoutImage(CommentDto.fromCommentAdd(commentAddRequest), user, board);
+            }else {
+                commentDto = commentService.saveComment(CommentDto.fromCommentAdd(commentAddRequest), image, "va/", user, board);
+            }
+
+
             if (commentDto == null) {
                 boardAddResponse.setIsSuccess(0);
             }
@@ -62,7 +70,6 @@ public class CommentController {
         }
 
     }
-
     private int loginOrNot(HttpSession session) {
         String userId = (String) session.getAttribute("userId");
         if (userId == null) {

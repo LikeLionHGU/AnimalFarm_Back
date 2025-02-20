@@ -57,4 +57,11 @@ public class Comment {
                 .board(board)
                 .build();
     }
+    public static Comment fromWithoutImage(CommentDto commentDto, User user, Board board) {
+        return Comment.builder()
+                .content(commentDto.getContent())
+                .user(user)
+                .board(board)
+                .build();
+    }
 }

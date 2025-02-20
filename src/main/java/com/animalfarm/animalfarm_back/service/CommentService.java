@@ -43,6 +43,7 @@ public class CommentService {
 
         Comment comment = Comment.from(commentDto, commentImageUrl, newUser, newBoard);
         commentRepository.save(comment);
+
         Optional<Notification> notificationOptional = notificationRepository.findByBoard(newBoard);
         Notification notification;
         if (notificationOptional.isEmpty()) {
@@ -57,6 +58,24 @@ public class CommentService {
         return CommentDto.from(comment, generateImageUrl(comment.getImage()));
     }
 
+    public CommentDto saveCommentWithoutImage(CommentDto commentDto, User newUser, Board newBoard) throws IOException {
+
+        Comment comment = Comment.fromWithoutImage(commentDto, newUser, newBoard);
+        commentRepository.save(comment);
+
+        Optional<Notification> notificationOptional = notificationRepository.findByBoard(newBoard);
+        Notification notification;
+        if (notificationOptional.isEmpty()) {
+            notification = Notification.from(newBoard.getUser(),newBoard, comment);
+            notificationRepository.save(notification);
+        } else {
+            notification = notificationOptional.get();
+            notification.update();
+        }
+
+
+        return CommentDto.from(comment, generateImageUrl(comment.getImage()));
+    }
     private String generateImageUrl(String storedFileName) {
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + storedFileName;
     }
