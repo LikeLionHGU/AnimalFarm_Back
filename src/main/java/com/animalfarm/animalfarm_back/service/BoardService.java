@@ -36,9 +36,16 @@ public class BoardService {
     private String region;
 
     public BoardDto saveBoard(BoardDto boardDto, MultipartFile image, String dirName, User newUser) throws IOException {
-        File uploadFile = s3UploadService.convert(image)
-                .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
-        String boardImageUrl = s3UploadService.upload(uploadFile, dirName);
+        String boardImageUrl;
+
+        if (image.isEmpty()) {
+            boardImageUrl = "https://hkwon.s3.ap-northeast-2.amazonaws.com/va/emptyImage.png";
+        } else {
+            File uploadFile = s3UploadService.convert(image)
+                    .orElseThrow(() -> new IOException("MultipartFile -> File 변환 실패"));
+            boardImageUrl = s3UploadService.upload(uploadFile, dirName);
+        }
+
         Board board = Board.from(boardDto, boardImageUrl, newUser);
         boardRepository.save(board);
         return BoardDto.from(board, generateImageUrl(board.getImage()));
