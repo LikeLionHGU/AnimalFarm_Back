@@ -27,10 +27,11 @@ public class NotificationController {
         NotificationResponse notificationResponse = new NotificationResponse();
         try {
             notificationResponse.setIsLogin(loginOrNot(session));
+
             String userId = (String) session.getAttribute("userId");
 
-            User user = userService.findUserById(userId);
-            List<NotificationDto> notificationDtos = notificationService.getAllNotifications(user);
+            User sessionUser = userService.findUserById(userId);
+            List<NotificationDto> notificationDtos = notificationService.getAllNotifications(sessionUser);
 
             if (notificationDtos.isEmpty()) {
                 notificationResponse.setNotifications(null);
