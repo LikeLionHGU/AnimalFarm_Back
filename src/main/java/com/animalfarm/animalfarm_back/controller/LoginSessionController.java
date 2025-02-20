@@ -96,4 +96,20 @@ public class LoginSessionController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logout(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            session.invalidate();
+
+            response.put("isSuccess", 1);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            response.put("isSuccess", 0);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+    }
+
 }
