@@ -37,6 +37,7 @@ public class BoardFoundController {
             @RequestPart("board") BoardInfoRequest boardInfoRequest,
             @RequestParam("image") MultipartFile image,
             HttpSession session) throws IOException {
+        BoardAddResponse boardAddResponse = new BoardAddResponse();
         try {
 
             if (session.getAttribute("userId") == null) {
@@ -52,7 +53,7 @@ public class BoardFoundController {
 
             BoardDto boardDto = boardService.saveBoard(BoardDto.fromBoardAdd(boardInfoRequest, 0), image, "va/", user);
 
-            BoardAddResponse boardAddResponse = new BoardAddResponse();
+
             if (session.getAttribute("userId") == null) {
                 boardAddResponse.setIsLogin(0); //로그인 확인 함수 필요
             } else {
@@ -66,12 +67,9 @@ public class BoardFoundController {
 
             return ResponseEntity.ok().body(boardAddResponse);
         } catch (Exception e) {
-            //////////////////////////////////////////////////////////  확인 필요
-            BoardAddResponse errorResponse = BoardAddResponse.builder()
-                    .isLogin(1) // 로그인 확인 함수 필요
-                    .isSuccess(0)
-                    .build();
-            return ResponseEntity.ok(errorResponse);
+            boardAddResponse.setIsSuccess(loginOrNot(session));
+            boardAddResponse.setIsSuccess(0);
+            return ResponseEntity.ok(boardAddResponse);
         }
     }
 
