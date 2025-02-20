@@ -58,6 +58,7 @@ public class CommentService {
         return CommentDto.from(comment, generateImageUrl(comment.getImage()));
     }
 
+    @Transactional
     public CommentDto saveCommentWithoutImage(CommentDto commentDto, User sessionUser, Board board) throws IOException {
 
         Comment comment = Comment.fromWithoutImage(commentDto, sessionUser, board);
