@@ -127,6 +127,7 @@ public class BoardDto {
                 .regDate(board.getRegDate())
                 .updateDate(board.getUpdateDate())
                 .userName(board.getUser().getName())
+                .userId(board.getUser().getId())
                 .isFound(board.getIsFound())
                 .build();
     }
