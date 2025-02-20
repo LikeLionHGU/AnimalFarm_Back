@@ -34,7 +34,7 @@ public class BoardLostController {
     @PostMapping("/add")
     public ResponseEntity<BoardAddResponse> addBoard(
             @RequestPart("board") BoardInfoRequest boardInfoRequest,
-            @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             HttpSession session){
         BoardAddResponse boardAddResponse = new BoardAddResponse();
         try {

@@ -30,7 +30,7 @@ public class CommentController {
     public ResponseEntity<BoardAddResponse> addComment(
             @PathVariable("board_id") Long board_id,
             @RequestPart("content") CommentAddRequest commentAddRequest,
-            @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             HttpSession session){
         BoardAddResponse boardAddResponse = new BoardAddResponse();
         try {
