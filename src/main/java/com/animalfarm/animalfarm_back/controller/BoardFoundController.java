@@ -9,6 +9,7 @@ import com.animalfarm.animalfarm_back.dto.SawPeopleDto;
 import com.animalfarm.animalfarm_back.service.BoardService;
 import com.animalfarm.animalfarm_back.service.SawPeopleService;
 import com.animalfarm.animalfarm_back.service.UserService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -130,7 +131,7 @@ public class BoardFoundController {
 
     @GetMapping("/all/category/search/new")
     public ResponseEntity<BoardCardResponse> showAllSearchBoardNew(
-            @RequestParam(value = "category", defaultValue = "0") int category,
+            @Parameter(description = "모든 카테고리", example = "0") @RequestParam(value = "category", defaultValue = "0") int category,
             @RequestParam("search") String search,
             HttpSession session) {
         BoardCardResponse boardCardResponse = new BoardCardResponse();
