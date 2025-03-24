@@ -66,6 +66,6 @@ jobs:
           fi
 
           echo "🚀 최신 JAR 실행 시작..."
-          JAR=$(ls /*.jar | tail -n 1)
+          JAR=$(ls /root/AnimalFarm_Back-0.0.1-SNAPSHOT.jar | tail -n 1)
           nohup java -jar $JAR > /root/nohup.out 2>&1 & disown  # ✅ 추가: 자바 프로세스를 터미널에서 분리
           echo "✅ $JAR 실행 완료!"
