@@ -6,66 +6,60 @@ on:
   pull_request:
     branches: [ "master" ]
 
-permissions:
-  contents: read
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
-    # 1. GitHub 코드 가져오기
+    # 1. 코드 체크아웃
     - name: Checkout source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    # 2. JDK 설치
+    # 2. JDK 설정
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # 3. gradlew 실행 권한 부여
+    # 3. Gradle 설정
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    # 4. gradlew 실행 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    # 4. Gradle 빌드 (테스트 생략)
-    - name: Build with Gradle (Skip Tests)
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: build -x test
+    # 5. Gradle 빌드
+    - name: Build with Gradle
+      run: ./gradlew build
 
-    # 5. PRIVATE_KEY 파일로 저장
+    # 6. PRIVATE_KEY를 임시 파일로 저장
     - name: Save PRIVATE_KEY to file
       run: |
         echo "${{ secrets.PRIVATE_KEY }}" > private_key.pem
         chmod 600 private_key.pem
 
-    # 6. JAR 파일 /root/로 복사
-    - name: Copy JAR to /root/
+    # 7. JAR 파일 서버로 전송
+    - name: Copy JAR to server
       run: |
-        scp -o StrictHostKeyChecking=no -i private_key.pem -P ${{ secrets.PORT }} ./build/libs/*.jar ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/root/
+        scp -o StrictHostKeyChecking=no -i private_key.pem -P ${{ secrets.PORT }} ./build/libs/*.jar ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/root/cicd/
 
-    # 7. 서버에 SSH 접속해 JAR 실행
-    - name: Run JAR on remote server
+    # 8. deploy.sh 서버로 전송
+    - name: Copy deploy.sh to server
+      run: |
+        scp -o StrictHostKeyChecking=no -i private_key.pem -P ${{ secrets.PORT }} ./deploy.sh ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/root/cicd/
+
+    # 9. 서버에서 deploy.sh 실행
+    - name: Run deploy script on remote server
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        script_stop: false  # ✅ 추가: 백그라운드 프로세스 실행 후 기다리지 않도록 설정
         script: |
-          echo "🔍 현재 실행 중인 자바 프로세스 종료 시도..."
-          PID=$(pgrep -f '.jar')
-          if [ -n "$PID" ]; then
-            kill -9 $PID
-            echo "🛑 기존 프로세스 종료 (PID: $PID)"
-          else
-            echo "✅ 실행 중인 자바 없음"
-          fi
-
-          echo "🚀 최신 JAR 실행 시작..."
-          JAR=$(ls /root/*SNAPSHOT.jar | grep -v plain | tail -n 1)
-          nohup java -jar $JAR > /root/nohup.out 2>&1 & disown  # ✅ 추가: 자바 프로세스를 터미널에서 분리
-          echo "✅ $JAR 실행 완료!"
+          chmod +x /root/deploy.sh
+          /root/deploy.sh
