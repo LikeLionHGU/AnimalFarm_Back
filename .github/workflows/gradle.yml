@@ -61,5 +61,6 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
+          cd /root/cicd
           chmod +x /root/deploy.sh
           /root/deploy.sh
