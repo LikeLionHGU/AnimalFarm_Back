@@ -11,6 +11,6 @@ else
 fi
 
 echo "🚀 최신 JAR 파일 실행..."
-JAR_PATH=$(ls /root/*SNAPSHOT.jar | tail -n 1)
+JAR_PATH=$(ls /root/cicd/*SNAPSHOT.jar | tail -n 1)
 nohup java -jar "$JAR_PATH" > /root/nohup.out 2>&1 &
 echo "✅ 배포 완료! 백그라운드 실행 중"
