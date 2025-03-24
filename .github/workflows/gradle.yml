@@ -29,8 +29,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    # 4. Gradle 빌드
-    - name: Build with Gradle
+    # 4. Gradle 빌드 (테스트 생략)
+    - name: Build with Gradle (Skip Tests)
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build -x test
@@ -46,7 +46,7 @@ jobs:
       run: |
         scp -o StrictHostKeyChecking=no -i private_key.pem -P ${{ secrets.PORT }} ./build/libs/*.jar ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/root/
 
-    # 7. 서버에 SSH 접속해 jar 실행
+    # 7. 서버에 SSH 접속해 JAR 실행
     - name: Run JAR on remote server
       uses: appleboy/ssh-action@v0.1.10
       with:
@@ -54,6 +54,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
+        script_stop: false  # ✅ 추가: 백그라운드 프로세스 실행 후 기다리지 않도록 설정
         script: |
           echo "🔍 현재 실행 중인 자바 프로세스 종료 시도..."
           PID=$(pgrep -f '.jar')
@@ -66,5 +67,5 @@ jobs:
 
           echo "🚀 최신 JAR 실행 시작..."
           JAR=$(ls /root/*.jar | tail -n 1)
-          nohup java -jar $JAR > /root/nohup.out 2>&1 &
+          nohup java -jar $JAR > /root/nohup.out 2>&1 & disown  # ✅ 추가: 자바 프로세스를 터미널에서 분리
           echo "✅ $JAR 실행 완료!"
