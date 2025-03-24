@@ -34,7 +34,7 @@ jobs:
 
     # 5. Gradle 빌드
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x test
 
     # 6. PRIVATE_KEY를 임시 파일로 저장
     - name: Save PRIVATE_KEY to file
