@@ -1,0 +1,70 @@
+name: Java CI/CD with Gradle
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. GitHub 코드 가져오기
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    # 2. JDK 설치
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # 3. gradlew 실행 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+    # 4. Gradle 빌드
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build
+
+    # 5. PRIVATE_KEY 파일로 저장
+    - name: Save PRIVATE_KEY to file
+      run: |
+        echo "${{ secrets.PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+
+    # 6. JAR 파일 /root/로 복사
+    - name: Copy JAR to /root/
+      run: |
+        scp -o StrictHostKeyChecking=no -i private_key.pem -P ${{ secrets.PORT }} ./build/libs/*.jar ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/root/
+
+    # 7. 서버에 SSH 접속해 jar 실행
+    - name: Run JAR on remote server
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          echo "🔍 현재 실행 중인 자바 프로세스 종료 시도..."
+          PID=$(pgrep -f '.jar')
+          if [ -n "$PID" ]; then
+            kill -9 $PID
+            echo "🛑 기존 프로세스 종료 (PID: $PID)"
+          else
+            echo "✅ 실행 중인 자바 없음"
+          fi
+
+          echo "🚀 최신 JAR 실행 시작..."
+          JAR=$(ls /root/*.jar | tail -n 1)
+          nohup java -jar $JAR > /root/nohup.out 2>&1 &
+          echo "✅ $JAR 실행 완료!"
